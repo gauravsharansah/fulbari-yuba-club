@@ -1,121 +1,65 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import { AuthProvider } from './context/AuthContext.jsx';
+import Navbar from './components/Navbar.jsx';
+import Footer from './components/Footer.jsx';
+import './index.css';
+
+import HomePage from './pages/HomePage.jsx';
+import AboutPage from './pages/AboutPage.jsx';
+import ProgramsPage from './pages/ProgramsPage.jsx';
+import { AwardsPage } from './pages/AwardsPage.jsx';
+import BlogPage from './pages/BlogPage.jsx';
+import { GalleryPage as Gallery, TeamPage, ContactPage } from './pages/OtherPages.jsx';
+import LoginPage from './pages/LoginPage.jsx';
+import AdminPage from './pages/AdminPage.jsx';
+
+const Layout = ({ children }) => (
+  <>
+    <Navbar />
+    <main>{children}</main>
+    <Footer />
+  </>
+);
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+    <BrowserRouter>
+      <AuthProvider>
+        <Toaster
+          position="bottom-right"
+          toastOptions={{
+            style: {
+              fontFamily: 'var(--font)',
+              fontWeight: 600,
+              fontSize: '0.9rem'
+            }
+          }}
+        />
+        <Routes>
+          <Route path="/" element={<Layout><HomePage /></Layout>} />
+          <Route path="/about" element={<Layout><AboutPage /></Layout>} />
+          <Route path="/programs" element={<Layout><ProgramsPage /></Layout>} />
+          <Route path="/awards" element={<Layout><AwardsPage /></Layout>} />
+          <Route path="/blog" element={<Layout><BlogPage /></Layout>} />
+          <Route path="/gallery" element={<Layout><Gallery /></Layout>} />
+          <Route path="/team" element={<Layout><TeamPage /></Layout>} />
+          <Route path="/contact" element={<Layout><ContactPage /></Layout>} />
+          <Route path="/login" element={<Layout><LoginPage /></Layout>} />
+          <Route path="/admin/*" element={<AdminPage />} />
+          <Route path="*" element={
+            <Layout>
+              <div style={{ padding: '200px 0', textAlign: 'center' }}>
+                <h1 style={{ fontSize: '3rem', fontWeight: 800, color: '#C8102E' }}>404</h1>
+                <p style={{ color: '#6B7280', marginTop: '1rem' }}>Page not found</p>
+              </div>
+            </Layout>
+          } />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
