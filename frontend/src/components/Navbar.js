@@ -46,8 +46,8 @@ const Navbar = () => {
         {/* Logo */}
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
           <img
-            src="/logo.png"
-            alt="FYC Jakma Logo"
+            src="/logo.jpeg"
+            alt="FYC Logo"
             style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #C8102E' }}
             onError={e => {
               e.target.style.display = 'none';

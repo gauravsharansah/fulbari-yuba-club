@@ -8,7 +8,7 @@ const Footer = () => (
 
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '1rem' }}>
-            <img src="/logo.png" alt="FYC" style={{ width: '48px', height: '48px', borderRadius: '50%', border: '2px solid #C8102E' }}
+            <img src="/logo.jpeg" alt="FYC" style={{ width: '48px', height: '48px', borderRadius: '50%', border: '2px solid #C8102E' }}
               onError={e => { e.target.style.display = 'none'; }} />
             <div>
               <div style={{ fontWeight: 800, fontSize: '1rem', color: 'white' }}>Fulbari Yuba Club</div>

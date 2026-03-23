@@ -500,4 +500,4 @@ cd frontend && vercel --prod
 
 ---
 
-*Built with ❤️ for Fulbari Yuba Club Jakma — Est. 2057 BS 🇳🇵*
+*Built for Fulbari Yuba Club — Est. 2057 BS 🇳🇵*
