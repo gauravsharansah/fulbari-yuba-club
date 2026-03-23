@@ -1,4 +1,4 @@
-# 🏆 Fulbari Yuba Club Jakma — Official Website
+# 🏆 Fulbari Yuba Club — Official Website
 
 **फुलबारी युवा क्लव जाक्मा** | Full-Stack Web Application
 
@@ -7,7 +7,7 @@
 ## 📁 Project Structure
 
 ```
-fyc-jakma/
+fyc/
 ├── backend/                  # Node.js + Express + MongoDB API
 │   ├── config/
 │   │   ├── cloudinary.js     # Image upload config
@@ -111,7 +111,7 @@ If not installed:
    ```
 8. Replace `<password>` with your actual password and add database name:
    ```
-   mongodb+srv://youruser:yourpassword@cluster0.xxxxx.mongodb.net/fyc-jakma?retryWrites=true&w=majority
+   mongodb+srv://youruser:yourpassword@cluster0.xxxxx.mongodb.net/fyc?retryWrites=true&w=majority
    ```
 
 ---
@@ -133,10 +133,10 @@ If not installed:
 # If pushing existing code to GitHub first:
 git init
 git add .
-git commit -m "Initial commit: FYC Jakma website"
+git commit -m "Initial commit: FYC website"
 
 # Create a new repo at github.com, then:
-git remote add origin https://github.com/YOUR_USERNAME/fyc-jakma.git
+git remote add origin https://github.com/YOUR_USERNAME/fyc.git
 git branch -M main
 git push -u origin main
 ```
@@ -147,7 +147,7 @@ git push -u origin main
 
 ```bash
 # Navigate to backend folder
-cd fyc-jakma/backend
+cd fyc/backend
 
 # Install dependencies
 npm install
@@ -159,8 +159,8 @@ cp .env.example .env
 Now open `backend/.env` and fill in all values:
 
 ```env
-MONGODB_URI=mongodb+srv://youruser:yourpassword@cluster0.xxxxx.mongodb.net/fyc-jakma?retryWrites=true&w=majority
-JWT_SECRET=FYCJakmaSecretKey2057ChangeThisToSomethingLong!
+MONGODB_URI=mongodb+srv://youruser:yourpassword@cluster0.xxxxx.mongodb.net/fyc?retryWrites=true&w=majority
+JWT_SECRET=FYCSecretKey2057ChangeThisToSomethingLong!
 JWT_EXPIRE=7d
 PORT=5000
 NODE_ENV=development
@@ -168,7 +168,7 @@ CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=123456789012345
 CLOUDINARY_API_SECRET=your_api_secret_here
 FRONTEND_URL=http://localhost:3000
-ADMIN_EMAIL=admin@fycjakma.com
+ADMIN_EMAIL=admin@fyc.com
 ADMIN_PASSWORD=FYC@Admin2057!
 ```
 
@@ -186,7 +186,7 @@ Test the API is working:
 ```
 http://localhost:5000/api/health
 ```
-Should return: `{"success":true,"message":"FYC Jakma API is running"}`
+Should return: `{"success":true,"message":"FYC API is running"}`
 
 ---
 
@@ -194,7 +194,7 @@ Should return: `{"success":true,"message":"FYC Jakma API is running"}`
 
 ```bash
 # Open a NEW terminal tab/window
-cd fyc-jakma/frontend
+cd fyc/frontend
 
 # Install dependencies
 npm install
@@ -224,7 +224,7 @@ npm start
 ## STEP 6 — Test Login Locally
 
 - **Member login**: Use the registered member credentials  
-- **Admin login**: `admin@fycjakma.com` / `FYC@Admin2057!`  
+- **Admin login**: `admin@fyc.com` / `FYC@Admin2057!`  
   → Goes to `/admin` dashboard
 
 ---
@@ -241,7 +241,7 @@ vercel login   # follow the prompts, login with your Vercel account
 ### 7b. Deploy Backend
 
 ```bash
-cd fyc-jakma/backend
+cd fyc/backend
 vercel
 ```
 
@@ -250,29 +250,29 @@ Answer the prompts:
 ? Set up and deploy? Yes
 ? Which scope? (your account)
 ? Link to existing project? No
-? Project name: fyc-jakma-backend
+? Project name: fyc-backend
 ? In which directory is your code located? ./
 ? Want to override settings? No
 ```
 
 ### 7c. Add Backend Environment Variables on Vercel
 
-Go to https://vercel.com → your `fyc-jakma-backend` project → **Settings** → **Environment Variables**
+Go to https://vercel.com → your `fyc-backend` project → **Settings** → **Environment Variables**
 
 Add ALL of these (for Production, Preview, AND Development):
 
 | Key | Value |
 |-----|-------|
-| `MONGODB_URI` | `mongodb+srv://user:pass@cluster0.xxxxx.mongodb.net/fyc-jakma?retryWrites=true&w=majority` |
-| `JWT_SECRET` | `FYCJakmaSecretKey2057ChangeThisToSomethingLong!` |
+| `MONGODB_URI` | `mongodb+srv://user:pass@cluster0.xxxxx.mongodb.net/fyc?retryWrites=true&w=majority` |
+| `JWT_SECRET` | `FYCSecretKey2057ChangeThisToSomethingLong!` |
 | `JWT_EXPIRE` | `7d` |
 | `PORT` | `5000` |
 | `NODE_ENV` | `production` |
 | `CLOUDINARY_CLOUD_NAME` | `your_cloud_name` |
 | `CLOUDINARY_API_KEY` | `your_api_key` |
 | `CLOUDINARY_API_SECRET` | `your_api_secret` |
-| `FRONTEND_URL` | `https://fyc-jakma.vercel.app` ← update after frontend deploy |
-| `ADMIN_EMAIL` | `admin@fycjakma.com` |
+| `FRONTEND_URL` | `https://fyc.vercel.app` ← update after frontend deploy |
+| `ADMIN_EMAIL` | `admin@fyc.com` |
 | `ADMIN_PASSWORD` | `FYC@Admin2057!` |
 
 ### 7d. Redeploy Backend (to apply env vars)
@@ -284,12 +284,12 @@ vercel --prod
 
 Copy your backend URL — it looks like:
 ```
-https://fyc-jakma-backend.vercel.app
+https://fyc-backend.vercel.app
 ```
 
 Test it:
 ```
-https://fyc-jakma-backend.vercel.app/api/health
+https://fyc-backend.vercel.app/api/health
 ```
 
 ---
@@ -299,30 +299,30 @@ https://fyc-jakma-backend.vercel.app/api/health
 ### 8a. Update Frontend `.env` with production API URL
 
 ```env
-REACT_APP_API_URL=https://fyc-jakma-backend.vercel.app/api
+REACT_APP_API_URL=https://fyc-backend.vercel.app/api
 ```
 
 ### 8b. Deploy Frontend
 
 ```bash
-cd fyc-jakma/frontend
+cd fyc/frontend
 vercel
 ```
 
 Prompts:
 ```
-? Project name: fyc-jakma
+? Project name: fyc
 ? Directory: ./
 ? Override settings? No
 ```
 
 ### 8c. Add Frontend Environment Variable on Vercel
 
-Go to Vercel → `fyc-jakma` (frontend) project → **Settings** → **Environment Variables**:
+Go to Vercel → `fyc` (frontend) project → **Settings** → **Environment Variables**:
 
 | Key | Value |
 |-----|-------|
-| `REACT_APP_API_URL` | `https://fyc-jakma-backend.vercel.app/api` |
+| `REACT_APP_API_URL` | `https://fyc-backend.vercel.app/api` |
 
 ### 8d. Build and Deploy Frontend
 
@@ -332,16 +332,16 @@ vercel --prod
 
 Your frontend URL will be:
 ```
-https://fyc-jakma.vercel.app
+https://fyc.vercel.app
 ```
 
 ### 8e. Update Backend CORS with Frontend URL
 
-Go back to Vercel → `fyc-jakma-backend` → Settings → Environment Variables
+Go back to Vercel → `fyc-backend` → Settings → Environment Variables
 
 Update:
 ```
-FRONTEND_URL = https://fyc-jakma.vercel.app
+FRONTEND_URL = https://fyc.vercel.app
 ```
 
 Then redeploy backend:
@@ -355,9 +355,9 @@ vercel --prod
 ## STEP 9 — Push All Changes to GitHub
 
 ```bash
-# From the root fyc-jakma/ folder
+# From the root fyc/ folder
 git add .
-git commit -m "feat: complete FYC Jakma website with admin portal"
+git commit -m "feat: complete FYC website with admin portal"
 git push origin main
 ```
 
@@ -367,7 +367,7 @@ git push origin main
 
 | Field | Value |
 |-------|-------|
-| Email | `admin@fycjakma.com` |
+| Email | `admin@fyc.com` |
 | Password | `FYC@Admin2057!` |
 | URL | `yoursite.vercel.app/login?tab=admin` |
 
