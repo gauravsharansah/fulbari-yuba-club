@@ -74,14 +74,12 @@ export const PostProgramModal = ({ onClose, onSuccess }) => {
       <F label="Full Description">
         <textarea className="form-input" rows="4" value={form.fullDesc} onChange={e => setForm({...form, fullDesc: e.target.value})} placeholder="Full program details..." />
       </F>
-      {/* Cover image */}
       <F label="Cover Image (optional)">
         <input type="file" className="form-input" accept="image/*" style={{padding:'8px'}}
           onChange={e => setCoverImage(e.target.files[0] || null)} />
         {coverImage && <p style={{fontSize:'0.8rem',color:'#166534',marginTop:'4px'}}>✓ {coverImage.name}</p>}
         <p style={{fontSize:'0.75rem',color:'var(--gray-400)',marginTop:'4px'}}>Leave blank to use the default emoji icon.</p>
       </F>
-      {/* Additional photos */}
       <F label="Additional Photos">
         <input type="file" className="form-input" multiple accept="image/*" style={{padding:'8px'}}
           onChange={e => setPhotos(Array.from(e.target.files))} />
@@ -141,7 +139,6 @@ export const PostAwardModal = ({ onClose, onSuccess }) => {
       <F label="Description">
         <textarea className="form-input" rows="3" value={form.description} onChange={e => setForm({...form, description: e.target.value})} placeholder="Description of this award..." />
       </F>
-      {/* Award image */}
       <F label="Award Image (optional)">
         <input type="file" className="form-input" accept="image/*" style={{padding:'8px'}}
           onChange={e => setImage(e.target.files[0] || null)} />
@@ -215,7 +212,6 @@ export const PostBlogModal = ({ onClose, onSuccess }) => {
       <F label="Content *">
         <textarea className="form-input" rows="8" value={form.content} onChange={e => setForm({...form, content: e.target.value})} placeholder="Full blog post content..." />
       </F>
-      {/* Cover image */}
       <F label="Cover Image (optional)">
         <input type="file" className="form-input" accept="image/*" style={{padding:'8px'}}
           onChange={e => setCoverImage(e.target.files[0] || null)} />
@@ -233,10 +229,26 @@ export const PostBlogModal = ({ onClose, onSuccess }) => {
 // ─── Post Gallery Modal ───────────────────────────────────────────────────────
 export const PostGalleryModal = ({ onClose, onSuccess }) => {
   const [files, setFiles] = useState([]);
-  const [caption, setCaption] = useState('');
-  const [category, setCategory] = useState('other');
+  // perPhoto: array of { caption: string } matching files index
+  const [perPhoto, setPerPhoto] = useState([]);
+  const [sharedCaption, setSharedCaption] = useState('');
+  const [sharedCategory, setSharedCategory] = useState('event');
+  const [usePerCaption, setUsePerCaption] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const handleFileChange = (e) => {
+    const selected = Array.from(e.target.files);
+    setFiles(selected);
+    setPerPhoto(selected.map(() => ({ caption: '' })));
+    // Auto-enable per-photo captions when multiple files selected
+    if (selected.length > 1) setUsePerCaption(true);
+    else setUsePerCaption(false);
+  };
+
+  const updatePerCaption = (index, value) => {
+    setPerPhoto(prev => prev.map((p, i) => i === index ? { ...p, caption: value } : p));
+  };
 
   const submit = async () => {
     if (files.length === 0) {
@@ -245,12 +257,33 @@ export const PostGalleryModal = ({ onClose, onSuccess }) => {
     }
     setLoading(true);
     try {
-      const fd = new FormData();
-      files.forEach(f => fd.append('photos', f));
-      fd.append('caption', caption);
-      fd.append('category', category);
-      const { data } = await API.post('/gallery', fd);
-      onSuccess(data.data);
+      // Upload photos one by one so each gets its own caption,
+      // or batch them if all share the same caption.
+      const uploaded = [];
+
+      if (!usePerCaption || files.length === 1) {
+        // Single upload — all share one caption & category
+        const fd = new FormData();
+        files.forEach(f => fd.append('photos', f));
+        fd.append('caption', sharedCaption);
+        fd.append('category', sharedCategory);
+        const { data } = await API.post('/gallery', fd);
+        const result = data.data;
+        uploaded.push(...(Array.isArray(result) ? result : [result]));
+      } else {
+        // Per-photo upload — one request per file to preserve individual captions
+        for (let i = 0; i < files.length; i++) {
+          const fd = new FormData();
+          fd.append('photos', files[i]);
+          fd.append('caption', perPhoto[i]?.caption || sharedCaption);
+          fd.append('category', sharedCategory);
+          const { data } = await API.post('/gallery', fd);
+          const result = data.data;
+          uploaded.push(...(Array.isArray(result) ? result : [result]));
+        }
+      }
+
+      onSuccess(uploaded);
       onClose();
     } catch (e) {
       setError(e.response?.data?.message || 'Upload failed. Please try again.');
@@ -262,6 +295,8 @@ export const PostGalleryModal = ({ onClose, onSuccess }) => {
   return (
     <ModalShell title="Upload Photos" onClose={onClose}>
       {error && <ErrBox msg={error} />}
+
+      {/* Drop zone */}
       <div
         style={{border:'2px dashed var(--gray-300)',borderRadius:'12px',padding:'2.5rem',textAlign:'center',cursor:'pointer',background:'var(--gray-50)',marginBottom:'1rem'}}
         onClick={() => document.getElementById('gallery-upload-modal').click()}
@@ -272,23 +307,74 @@ export const PostGalleryModal = ({ onClose, onSuccess }) => {
         {files.length > 0 && <p style={{marginTop:'0.5rem',color:'#166534',fontWeight:600}}>✓ {files.length} photo(s) selected</p>}
       </div>
       <input id="gallery-upload-modal" type="file" multiple accept="image/*" style={{display:'none'}}
-        onChange={e => setFiles(Array.from(e.target.files))} />
-      <G2>
-        <F label="Caption">
-          <input className="form-input" value={caption} onChange={e => setCaption(e.target.value)} placeholder="Caption for these photos..." />
+        onChange={handleFileChange} />
+
+      {/* Category — always shared */}
+      <F label="Category">
+        <select className="form-input" value={sharedCategory} onChange={e => setSharedCategory(e.target.value)}>
+          <option value="match">Match</option>
+          <option value="event">Event</option>
+          <option value="training">Training</option>
+          <option value="community">Community</option>
+          <option value="cultural">Cultural</option>
+        </select>
+      </F>
+
+      {/* Caption section */}
+      {files.length > 1 && (
+        <div style={{display:'flex',alignItems:'center',gap:'10px',margin:'0.75rem 0',padding:'10px 14px',background:'var(--gray-50)',borderRadius:'8px',border:'1px solid var(--gray-200)'}}>
+          <input
+            type="checkbox"
+            id="per-caption-toggle"
+            checked={usePerCaption}
+            onChange={e => setUsePerCaption(e.target.checked)}
+            style={{accentColor:'#C8102E',width:'16px',height:'16px',cursor:'pointer'}}
+          />
+          <label htmlFor="per-caption-toggle" style={{fontSize:'0.85rem',fontWeight:600,color:'var(--gray-700)',cursor:'pointer'}}>
+            Add individual caption per photo
+          </label>
+        </div>
+      )}
+
+      {/* Shared caption (single photo or toggled off) */}
+      {(!usePerCaption || files.length <= 1) && (
+        <F label={files.length > 1 ? 'Shared Caption (optional)' : 'Caption (optional)'}>
+          <input
+            className="form-input"
+            value={sharedCaption}
+            onChange={e => setSharedCaption(e.target.value)}
+            placeholder={files.length > 1 ? 'Same caption applied to all photos...' : 'Caption for this photo...'}
+          />
         </F>
-        <F label="Category">
-          <select className="form-input" value={category} onChange={e => setCategory(e.target.value)}>
-            <option value="match">Match</option>
-            <option value="event">Event</option>
-            <option value="training">Training</option>
-            <option value="community">Community</option>
-            <option value="cultural">Cultural</option>
-            <option value="other">Other</option>
-          </select>
-        </F>
-      </G2>
-      <Actions onClose={onClose} onSubmit={submit} loading={loading} label="Upload Photos" />
+      )}
+
+      {/* Per-photo captions */}
+      {usePerCaption && files.length > 1 && (
+        <div style={{display:'flex',flexDirection:'column',gap:'8px',marginBottom:'0.5rem'}}>
+          <label className="form-label">Captions per photo</label>
+          {files.map((file, i) => (
+            <div key={i} style={{display:'flex',alignItems:'center',gap:'10px',background:'var(--gray-50)',border:'1px solid var(--gray-200)',borderRadius:'8px',padding:'8px 10px'}}>
+              <span style={{
+                minWidth:'24px',height:'24px',background:'#C8102E',color:'white',
+                borderRadius:'50%',display:'flex',alignItems:'center',justifyContent:'center',
+                fontSize:'0.7rem',fontWeight:800,flexShrink:0,
+              }}>{i + 1}</span>
+              <span style={{fontSize:'0.78rem',color:'var(--gray-500)',minWidth:0,flex:'0 0 auto',maxWidth:'120px',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>
+                {file.name}
+              </span>
+              <input
+                className="form-input"
+                value={perPhoto[i]?.caption || ''}
+                onChange={e => updatePerCaption(i, e.target.value)}
+                placeholder={`Caption for photo ${i + 1}...`}
+                style={{flex:1,marginBottom:0}}
+              />
+            </div>
+          ))}
+        </div>
+      )}
+
+      <Actions onClose={onClose} onSubmit={submit} loading={loading} label={loading ? `Uploading ${files.length > 1 ? 'photos...' : 'photo...'}` : 'Upload Photos'} />
     </ModalShell>
   );
 };
