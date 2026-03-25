@@ -9,7 +9,7 @@ import './index.css';
 import HomePage from './pages/HomePage.jsx';
 import AboutPage from './pages/AboutPage.jsx';
 import ProgramsPage from './pages/ProgramsPage.jsx';
-import { AwardsPage } from './pages/AwardsPage.jsx';
+import AwardsPage from './pages/AwardsPage.jsx';
 import BlogPage from './pages/BlogPage.jsx';
 import GalleryPage from './pages/GalleryPage.jsx';
 import { TeamPage, ContactPage } from './pages/OtherPages.jsx';
