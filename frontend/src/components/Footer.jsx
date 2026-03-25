@@ -8,7 +8,7 @@ const Footer = () => (
 
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '1rem' }}>
-            <img src="/logo.jpeg" alt="FYC" style={{ width: '48px', height: '48px', borderRadius: '50%', border: '2px solid #C8102E' }}
+            <img src="/logo.png" alt="FYC" style={{ width: '48px', height: '48px', borderRadius: '50%', border: '2px solid #C8102E' }}
               onError={e => { e.target.style.display = 'none'; }} />
             <div>
               <div style={{ fontWeight: 800, fontSize: '1rem', color: 'white' }}>Fulbari Yuba Club</div>
@@ -20,7 +20,7 @@ const Footer = () => (
             Manyavangyag Gaun Palika-6, Okhaldhunga, Nepal.
           </p>
           <div style={{ display: 'flex', gap: '10px' }}>
-            <a href="https://facebook.com/fulbariyubaclub" target="_blank" rel="noreferrer"
+            <a href="https://www.facebook.com/profile.php?id=100084950064757" target="_blank" rel="noreferrer"
               style={{ width: '36px', height: '36px', borderRadius: '8px', background: '#374151', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem', transition: 'background 0.2s' }}>
               f
             </a>
@@ -39,7 +39,7 @@ const Footer = () => (
 
         <div>
           <h4 style={{ color: 'white', fontWeight: 700, fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '1rem' }}>Club</h4>
-          {[['/team', 'Team Members'], ['/awards', 'Awards'], ['/contact', 'Contact'], ['/login', 'Member Login']].map(([to, label]) => (
+          {[['/team', 'Team Members'], ['/awards', 'Awards'], ['/contact', 'Contact']].map(([to, label]) => (
             <Link key={to} to={to} style={{ display: 'block', color: '#9CA3AF', fontSize: '0.88rem', marginBottom: '8px', transition: 'color 0.2s' }}
               onMouseEnter={e => e.target.style.color = 'white'} onMouseLeave={e => e.target.style.color = '#9CA3AF'}>
               {label}
@@ -52,19 +52,17 @@ const Footer = () => (
           <div style={{ fontSize: '0.88rem', color: '#9CA3AF', lineHeight: 2 }}>
             <p>📍 Jakma, Manyavangyag-6</p>
             <p>Okhaldhunga, Nepal 56100</p>
-            <p style={{ marginTop: '8px' }}>📘 fulbariyubaclub</p>
-            <p>🌐 434 Followers</p>
+            <ContactCard href="https://mail.google.com/mail/?view=cm&fs=1&to=fulbariyubaclub@gmail.com" icon={Mail} title="Email" subtitle="fulbariyubaclub@gmail.com" />
+            <p style={{ marginTop: '8px' }}>📘 +977 9709192259</p>
+            <p style={{ marginTop: '8px' }}>📘 +977 9861949067</p>
           </div>
         </div>
       </div>
 
-      <div style={{ borderTop: '1px solid #374151', padding: '1.5rem 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+      <div style={{ borderTop: '1px solid #374151', padding: '1.5rem 0', alignItems: 'center', flexWrap: 'wrap' }}>
         <p style={{ fontSize: '0.82rem', color: '#6B7280' }}>
           © {new Date().getFullYear()} Fulbari Yuba Club Jakma. All rights reserved.
         </p>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: '#6B7280' }}>
-          <span>🇳🇵</span> Made with ❤️ in Nepal
-        </div>
       </div>
     </div>
 
