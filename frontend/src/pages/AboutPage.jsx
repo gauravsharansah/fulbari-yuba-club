@@ -1,6 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+// --- Executive Committee ---
+const EXECUTIVES = [
+  { _id: 'e1', name: 'Amrit Bahadur Rai', position: 'President', image: '/president.jpeg' },
+  { _id: 'e2', name: 'Club Vice President', position: 'Vice President', image: null },
+  { _id: 'e3', name: 'General Secretary', position: 'General Secretary', image: null },
+  { _id: 'e4', name: 'Treasurer', position: 'Treasurer', image: null },
+];
+
+// --- Reusable Member Card ---
+const MemberCard = ({ member, showJersey = false }) => (
+  <div className="card" style={{ padding: '2rem', textAlign: 'center' }}>
+    {member.image ? (
+      <img
+        src={member.image}
+        alt={member.name}
+        style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', margin: '0 auto 1rem', border: '3px solid #FCE7E9' }}
+      />
+    ) : (
+      <div style={{
+        width: '80px', height: '80px', borderRadius: '50%',
+        background: 'linear-gradient(135deg,#C8102E,#9B0B22)',
+        margin: '0 auto 1rem', display: 'flex', alignItems: 'center',
+        justifyContent: 'center', fontSize: '1.8rem', color: 'white',
+        border: '3px solid #FCE7E9', fontWeight: 700,
+      }}>
+        {member.name[0]?.toUpperCase()}
+      </div>
+    )}
+    <div style={{ fontWeight: 700, color: 'var(--gray-900)', marginBottom: '4px' }}>{member.name}</div>
+    <div style={{ fontSize: '0.78rem', fontWeight: 600, color: '#C8102E' }}>
+      {member.position}{showJersey && member.jerseyNumber ? ` · #${member.jerseyNumber}` : ''}
+    </div>
+  </div>
+);
+
+// --- Section Header ---
+const SectionHeader = ({ title }) => (
+  <h2 style={{
+    fontSize: '1.4rem', fontWeight: 800, color: 'var(--gray-900)',
+    marginBottom: '1.5rem', paddingBottom: '0.75rem',
+    borderBottom: '3px solid #C8102E', display: 'inline-block',
+  }}>
+    {title}
+  </h2>
+);
+
 const AboutPage = () => (
   <div style={{ paddingTop: 'var(--navbar-h)' }}>
 
@@ -40,7 +86,7 @@ const AboutPage = () => (
                 { label: 'Founded', value: '2057 BS (Nepal)' },
                 { label: 'Location', value: 'Jakma, Okhaldhunga' },
                 { label: 'Category', value: 'Youth Football Club' },
-                { label: 'Facebook', value: '434 Followers' },
+                { label: 'Titles | Runner-Ups', value: '1 | 2' },
               ].map((item, i) => (
                 <div key={i} style={{ background: 'var(--gray-50)', border: '1px solid var(--gray-200)', borderRadius: '10px', padding: '1rem' }}>
                   <div style={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--primary)', marginBottom: '4px' }}>{item.label}</div>
@@ -120,28 +166,18 @@ const AboutPage = () => (
       </div>
     </section>
 
-    {/* President */}
+    {/* Executive Committee */}
     <section className="section" style={{ background: 'var(--gray-50)' }}>
       <div className="container">
-        <div className="section-header">
-          <span className="section-tag">Leadership</span>
-          <h2 className="section-title">Executive Committee</h2>
+
+        {/* Executive Committee */}
+        <div style={{ marginBottom: '3.5rem' }}>
+          <SectionHeader title="⚙️ Executive Committee" />
+          <div className="grid-4">
+            {EXECUTIVES.map(m => <MemberCard key={m._id} member={m} />)}
+          </div>
         </div>
-        <div className="grid-4">
-          {[
-            { name: 'Amrit Bahadur Rai', pos: 'President', since: '2075 BS' },
-            { name: 'Vice President', pos: 'Vice President', since: 'Executive Committee' },
-            { name: 'General Secretary', pos: 'General Secretary', since: 'Executive Committee' },
-            { name: 'Treasurer', pos: 'Finance & Treasurer', since: 'Executive Committee' },
-          ].map((m, i) => (
-            <div key={i} className="card" style={{ padding: '2rem', textAlign: 'center' }}>
-              <div style={{ width: '72px', height: '72px', borderRadius: '50%', background: 'linear-gradient(135deg,#C8102E,#9B0B22)', margin: '0 auto 1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.8rem', color: 'white' }}>👤</div>
-              <div style={{ fontWeight: 700, color: 'var(--gray-900)', marginBottom: '4px' }}>{m.name}</div>
-              <div style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--primary)', marginBottom: '4px' }}>{m.pos}</div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--gray-400)' }}>{m.since}</div>
-            </div>
-          ))}
-        </div>
+
       </div>
     </section>
 
