@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const Footer = () => (
   <footer style={{ background: '#1F2937', color: '#D1D5DB', paddingTop: '56px' }}>
     <div className="container">
-      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: '2.5rem', paddingBottom: '3rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1.6fr 1.2fr 2fr 1.6fr', gap: '2.5rem', paddingBottom: '3rem' }}>
 
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '1rem' }}>
@@ -15,20 +15,10 @@ const Footer = () => (
               <div style={{ fontSize: '0.72rem', color: '#9CA3AF', letterSpacing: '1px' }}>JAKMA · EST. 2057 BS</div>
             </div>
           </div>
-          <p style={{ fontSize: '0.88rem', lineHeight: 1.7, color: '#9CA3AF', marginBottom: '1rem' }}>
-            FYC | A hub for youth, sports, culture &amp; community growth.<br />
-            Manyavangyag Gaun Palika-6, Okhaldhunga, Nepal.
-          </p>
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <a href="https://www.facebook.com/profile.php?id=100084950064757" target="_blank" rel="noreferrer"
-              style={{ width: '36px', height: '36px', borderRadius: '8px', background: '#374151', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem', transition: 'background 0.2s' }}>
-              f
-            </a>
-          </div>
         </div>
 
         <div>
-          <h4 style={{ color: 'white', fontWeight: 700, fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '1rem' }}>Pages</h4>
+          <h4 style={{ color: 'white', fontWeight: 700, fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '1rem' }}>Quick Links</h4>
           {[['/', 'Home'], ['/about', 'About Us'], ['/programs', 'Programs'], ['/blog', 'Blog'], ['/gallery', 'Gallery']].map(([to, label]) => (
             <Link key={to} to={to} style={{ display: 'block', color: '#9CA3AF', fontSize: '0.88rem', marginBottom: '8px', transition: 'color 0.2s' }}
               onMouseEnter={e => e.target.style.color = 'white'} onMouseLeave={e => e.target.style.color = '#9CA3AF'}>
@@ -38,25 +28,24 @@ const Footer = () => (
         </div>
 
         <div>
-          <h4 style={{ color: 'white', fontWeight: 700, fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '1rem' }}>Club</h4>
-          {[['/team', 'Team Members'], ['/awards', 'Awards'], ['/contact', 'Contact']].map(([to, label]) => (
-            <Link key={to} to={to} style={{ display: 'block', color: '#9CA3AF', fontSize: '0.88rem', marginBottom: '8px', transition: 'color 0.2s' }}
-              onMouseEnter={e => e.target.style.color = 'white'} onMouseLeave={e => e.target.style.color = '#9CA3AF'}>
-              {label}
-            </Link>
-          ))}
+          <h4 style={{ color: 'white', fontWeight: 700, fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase', textAlign: 'center', marginBottom: '1rem' }}>Contact</h4>
+          <div style={{ fontSize: '0.88rem', color: '#9CA3AF', lineHeight: 2, gap: '10px' }}>
+            <p style={{ display: 'flex', gap: '3px', alignItems: 'center'}}> <img src="/map.png" alt="" style={{ width: '32px', height: '24px', alignItems: 'center'}} />Manyavangyag-6, Okhaldhunga, Nepal</p>
+            <p style={{ display: 'flex', gap: '3px', alignItems: 'center'}}> <img src="/phone.png" alt="" style={{ width: '32px', height: '24px', alignItems: 'center'}} /> <a href="https://mail.google.com/mail/?view=cm&fs=1&to=fulbariyubaclub@gmail.com">fulbariyubaclub@gmail.com</a></p>
+            <p style={{ display: 'flex', gap: '3px', alignItems: 'center'}}> <img src="/mail.png" alt="" style={{ width: '32px', height: '24px', alignItems: 'center'}} /> + 977 9709192259 , +97709861949067</p>
+          </div>
         </div>
 
         <div>
-          <h4 style={{ color: 'white', fontWeight: 700, fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '1rem' }}>Contact</h4>
-          <div style={{ fontSize: '0.88rem', color: '#9CA3AF', lineHeight: 2 }}>
-            <p>📍 Jakma, Manyavangyag-6</p>
-            <p>Okhaldhunga, Nepal 56100</p>
-            <p style={{ display: 'flex', gap: '3px', alignItems: 'center'}}> <img src="/mail.png" alt="" style={{ width: '32px', height: '24px', alignItems: 'center'}} /> <a href="https://mail.google.com/mail/?view=cm&fs=1&to=fulbariyubaclub@gmail.com">fulbariyubaclub@gmail.com</a></p>
-            <p style={{ marginTop: '8px' }}>📘 +977 9709192259</p>
-            <p style={{ marginTop: '8px' }}>📘 +977 9861949067</p>
+          <h4 style={{ color: 'white', fontWeight: 700, fontSize: '0.85rem', letterSpacing: '1px', textAlign: 'center', textTransform: 'uppercase', marginBottom: '1rem' }}>Social Media</h4>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '10px'}}>
+            <a href='https://www.facebook.com/profile.php?id=100084950064757'><img src="/facebook.png" alt="" style={{ width: '60px', height: '40px', alignItems: 'center'}}/></a>
+            <a href='https://www.facebook.com/profile.php?id=100084950064757'><img src="/twitter.png" alt="" style={{ width: '40px', height: '40px', alignItems: 'center'}} /></a>
+            <a href='https://www.facebook.com/profile.php?id=100084950064757'><img src="/youtube.png" alt="" style={{ width: '40px', height: '36px', alignItems: 'top'}}/></a>
+            <a href='https://www.facebook.com/profile.php?id=100084950064757'><img src="/instagram.png" alt="" style={{ width: '40px', height: '40px', alignItems: 'center'}}/></a>
           </div>
         </div>
+
       </div>
 
       <div style={{ borderTop: '1px solid #374151', padding: '1.5rem 0', textAlign: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
