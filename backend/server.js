@@ -14,21 +14,23 @@ app.use(morgan('dev'));
 
 // --- Rate Limiting ---
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs: 15 * 60 * 1000,
   max: 100,
   message: { success: false, message: 'Too many requests, please try again later.' }
 });
 app.use('/api/', limiter);
 
 // --- CORS ---
-const allowedOrigins = [
-  process.env.FRONTEND_URL || 'http://localhost:3000',
-  'https://fyc-jakma.vercel.app',
-  'http://localhost:3000'
-];
+// Add all allowed frontend URLs as a comma-separated list in your backend .env:
+// ALLOWED_ORIGINS=http://localhost:5173,https://fyc-jakma.vercel.app
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
+  : ['http://localhost:5173'];
+
 app.use(cors({
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+    console.warn(`⚠️  CORS blocked request from: ${origin}`);
     callback(new Error('CORS not allowed'));
   },
   credentials: true
@@ -71,7 +73,6 @@ const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
     console.log('✅ MongoDB Connected');
-    // Seed admin on first run
     const { seedAdmin } = require('./config/seed');
     await seedAdmin();
   } catch (err) {
@@ -84,6 +85,7 @@ const PORT = process.env.PORT || 5000;
 connectDB().then(() => {
   app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`🌐 Allowed origins: ${allowedOrigins.join(', ')}`);
   });
 });
 
