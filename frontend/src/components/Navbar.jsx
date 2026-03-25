@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
-import { useLang } from '../context/LanguageContext.jsx';
 
 const Navbar = () => {
   const { user, logout, setShowAdminModal } = useAuth();
