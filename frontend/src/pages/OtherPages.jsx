@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-//import { useLang } from '../context/LanguageContext.jsx';
 import API from '../utils/api.js';
 
 // --- Executive Committee ---
@@ -158,12 +157,6 @@ export const ContactPage = () => {
     { icon: '🌐', title: 'Region',        val: 'Okhaldhunga · Manebhanjyang, Nepal' },
     { icon: '🕐', title: 'Founded',       val: '2057 BS (2000 AD)' },
   ];
-  // const contactItems = [
-  //   { icon: '📍', title: t('contact_address'), val: t('contact_address_val') },
-  //   { icon: '📘', title: t('contact_facebook'), val: t('contact_facebook_val') },
-  //   { icon: '🌐', title: t('contact_region'), val: t('contact_region_val') },
-  //   { icon: '🕐', title: t('contact_founded'), val: t('contact_founded_val') },
-  // ];
 
   return (
     <div style={{ paddingTop: 'var(--navbar-h)' }}>
