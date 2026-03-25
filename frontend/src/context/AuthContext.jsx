@@ -6,6 +6,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showAdminModal, setShowAdminModal] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem('fyc_user');
@@ -24,14 +25,6 @@ export const AuthProvider = ({ children }) => {
     return data.user;
   };
 
-  const register = async (name, email, password, phone) => {
-    const { data } = await API.post('/auth/register', { name, email, password, phone });
-    localStorage.setItem('fyc_token', data.token);
-    localStorage.setItem('fyc_user', JSON.stringify(data.user));
-    setUser(data.user);
-    return data.user;
-  };
-
   const logout = () => {
     localStorage.removeItem('fyc_token');
     localStorage.removeItem('fyc_user');
@@ -39,7 +32,15 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, register, loading, isAdmin: user?.role === 'admin' }}>
+    <AuthContext.Provider value={{
+      user,
+      login,
+      logout,
+      loading,
+      isAdmin: user?.role === 'admin',
+      showAdminModal,
+      setShowAdminModal,
+    }}>
       {children}
     </AuthContext.Provider>
   );
