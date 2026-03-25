@@ -24,10 +24,8 @@ const STATIC_PROGRAMS = [
 ];
 
 const STATIC_STATS = [
-  { num: '434', label: 'Facebook Followers', icon: '📘' },
-  { num: '91', label: 'Social Media Posts', icon: '📸' },
   { num: '2057', label: 'Established (BS)', icon: '📅' },
-  { num: '10+', label: 'Programs Per Year', icon: '🏆' },
+  { num: '2+', label: 'Programs Per Year', icon: '🏆' },
 ];
 
 const HomePage = () => {
@@ -140,11 +138,11 @@ const HomePage = () => {
       {/* ---- STATS ---- */}
       <section style={{ background: 'white', borderBottom: '1px solid var(--gray-200)', padding: '0' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 0 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 'auto' }}>
             {STATIC_STATS.map((s, i) => (
               <div key={i} style={{
                 padding: '2rem 1.5rem', textAlign: 'center',
-                borderRight: i < 3 ? '1px solid var(--gray-200)' : 'none'
+                borderRight: i < 1 ? '1px solid var(--gray-200)' : 'none'
               }}>
                 <div style={{ fontSize: '1.8rem', marginBottom: '0.5rem' }}>{s.icon}</div>
                 <div style={{ fontSize: '2rem', fontWeight: 800, color: '#C8102E', lineHeight: 1 }}>{s.num}</div>
@@ -240,7 +238,7 @@ const HomePage = () => {
                 background: 'rgba(255,255,255,0.15)', border: '4px solid rgba(255,255,255,0.4)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontSize: '4rem', margin: '0 auto 1rem'
-              }}>👤</div>
+              }}><img src="/president.jpeg" alt="" style={{width: '160px', height: '160px', borderRadius: '50%'}} /></div>
               <div style={{ color: 'rgba(255,255,255,0.9)', fontWeight: 700, fontSize: '1rem' }}>Mr. Amrit Bahadur Rai</div>
               <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.78rem', letterSpacing: '1px', textTransform: 'uppercase', marginTop: '4px' }}>Club President</div>
             </div>
@@ -271,7 +269,7 @@ const HomePage = () => {
           </p>
           <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link to="/contact" className="btn btn-primary btn-lg">Contact Us</Link>
-            <a href="https://facebook.com/fulbariyubaclub" target="_blank" rel="noreferrer" className="btn btn-ghost btn-lg">Follow on Facebook</a>
+            <a href="https://www.facebook.com/profile.php?id=100084950064757" target="_blank" rel="noreferrer" className="btn btn-ghost btn-lg">Follow on Facebook</a>
           </div>
         </div>
       </section>
