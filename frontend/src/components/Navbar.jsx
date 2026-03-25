@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext.jsx';
 import { useLang } from '../context/LanguageContext.jsx';
 
 const Navbar = () => {
+  const { user, logout, setShowAdminModal } = useAuth();
   const { t } = useLang();
+  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -13,9 +17,29 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Scroll to top on any navigation
   const handleNavClick = () => {
     window.scrollTo({ top: 0, behavior: 'instant' });
     setMobileOpen(false);
+    setUserMenuOpen(false);
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    setMobileOpen(false);
+    setUserMenuOpen(false);
+  };
+
+  const handleAdminClick = () => {
+    setMobileOpen(false);
+    if (user && user.role === 'admin') {
+      navigate('/admin');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    } else {
+      setShowAdminModal(true);
+    }
   };
 
   const links = [
@@ -94,20 +118,89 @@ const Navbar = () => {
             ))}
           </div>
 
-          {/* Hamburger */}
-          <button
-            className="hamburger-btn"
-            onClick={() => setMobileOpen(m => !m)}
-            style={{
-              display: 'none',
-              flexDirection: 'column', gap: '5px',
-              background: 'none', border: 'none', cursor: 'pointer', padding: '6px',
-            }}
-          >
-            <span style={{ width: '22px', height: '2px', background: '#374151', borderRadius: '2px', transition: 'all 0.3s', transform: mobileOpen ? 'rotate(45deg) translateY(7px)' : 'none' }}></span>
-            <span style={{ width: '22px', height: '2px', background: '#374151', borderRadius: '2px', opacity: mobileOpen ? 0 : 1 }}></span>
-            <span style={{ width: '22px', height: '2px', background: '#374151', borderRadius: '2px', transition: 'all 0.3s', transform: mobileOpen ? 'rotate(-45deg) translateY(-7px)' : 'none' }}></span>
-          </button>
+          {/* Right side */}
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexShrink: 0 }}>
+            {user && user.role === 'admin' ? (
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <Link
+                  to="/admin"
+                  onClick={handleNavClick}
+                  className="btn btn-primary btn-sm"
+                >
+                  {t('nav_dashboard')}
+                </Link>
+                <div style={{ position: 'relative' }}>
+                  <button
+                    onClick={() => setUserMenuOpen(m => !m)}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: '6px',
+                      padding: '6px 12px',
+                      background: 'var(--gray-100)',
+                      border: '1.5px solid var(--gray-200)',
+                      borderRadius: '8px',
+                      fontFamily: 'var(--font)', fontWeight: 600, fontSize: '0.82rem', cursor: 'pointer',
+                    }}
+                  >
+                    <span style={{
+                      width: '26px', height: '26px', borderRadius: '50%',
+                      background: '#C8102E', color: 'white',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: '0.72rem', fontWeight: 700,
+                    }}>
+                      {user.name?.[0]?.toUpperCase()}
+                    </span>
+                    {user.name?.split(' ')[0]}
+                  </button>
+                  {userMenuOpen && (
+                    <div style={{
+                      position: 'absolute', top: '100%', right: 0, marginTop: '4px',
+                      background: 'white', borderRadius: '10px',
+                      border: '1px solid var(--gray-200)',
+                      boxShadow: 'var(--shadow-lg)', minWidth: '160px',
+                      overflow: 'hidden', zIndex: 100,
+                    }}>
+                      <div style={{ padding: '10px 14px', borderBottom: '1px solid var(--gray-100)', fontSize: '0.78rem', color: 'var(--gray-500)' }}>
+                        {user.email}
+                      </div>
+                      <button
+                        onClick={handleLogout}
+                        style={{
+                          width: '100%', padding: '10px 14px', textAlign: 'left',
+                          background: 'none', border: 'none', cursor: 'pointer',
+                          color: '#C8102E', fontWeight: 600, fontSize: '0.85rem',
+                          fontFamily: 'var(--font)',
+                        }}
+                      >
+                        {t('nav_logout')}
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <button
+                onClick={handleAdminClick}
+                className="btn btn-primary btn-sm"
+              >
+                🔐 {t('nav_admin')}
+              </button>
+            )}
+
+            {/* Hamburger */}
+            <button
+              className="hamburger-btn"
+              onClick={() => setMobileOpen(m => !m)}
+              style={{
+                display: 'none',
+                flexDirection: 'column', gap: '5px',
+                background: 'none', border: 'none', cursor: 'pointer', padding: '6px',
+              }}
+            >
+              <span style={{ width: '22px', height: '2px', background: '#374151', borderRadius: '2px', transition: 'all 0.3s', transform: mobileOpen ? 'rotate(45deg) translateY(7px)' : 'none' }}></span>
+              <span style={{ width: '22px', height: '2px', background: '#374151', borderRadius: '2px', opacity: mobileOpen ? 0 : 1 }}></span>
+              <span style={{ width: '22px', height: '2px', background: '#374151', borderRadius: '2px', transition: 'all 0.3s', transform: mobileOpen ? 'rotate(-45deg) translateY(-7px)' : 'none' }}></span>
+            </button>
+          </div>
         </div>
 
         {/* Mobile Drawer */}
@@ -138,6 +231,22 @@ const Navbar = () => {
                   {t(l.key)}
                 </NavLink>
               ))}
+              <div style={{ marginTop: '1rem' }}>
+                {user && user.role === 'admin' ? (
+                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                    <Link to="/admin" onClick={handleNavClick} className="btn btn-primary" style={{ flex: 1, justifyContent: 'center' }}>
+                      {t('nav_dashboard')}
+                    </Link>
+                    <button onClick={handleLogout} className="btn btn-outline" style={{ flex: 1, justifyContent: 'center' }}>
+                      {t('nav_logout')}
+                    </button>
+                  </div>
+                ) : (
+                  <button onClick={handleAdminClick} className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
+                    🔐 {t('nav_admin')}
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         )}
