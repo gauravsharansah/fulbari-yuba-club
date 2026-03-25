@@ -4,7 +4,7 @@ import API from '../utils/api.js';
 
 // --- Executive Committee ---
 const EXECUTIVES = [
-  { _id: 'e1', name: 'Amrit Bahadur Rai', position: 'President', image: null },
+  { _id: 'e1', name: 'Amrit Bahadur Rai', position: 'President', image: '/president.jpeg' },
   { _id: 'e2', name: 'Club Vice President', position: 'Vice President', image: null },
   { _id: 'e3', name: 'General Secretary', position: 'General Secretary', image: null },
   { _id: 'e4', name: 'Treasurer', position: 'Treasurer', image: null },
