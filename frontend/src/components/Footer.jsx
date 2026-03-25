@@ -52,14 +52,14 @@ const Footer = () => (
           <div style={{ fontSize: '0.88rem', color: '#9CA3AF', lineHeight: 2 }}>
             <p>📍 Jakma, Manyavangyag-6</p>
             <p>Okhaldhunga, Nepal 56100</p>
-            <ContactCard href="https://mail.google.com/mail/?view=cm&fs=1&to=fulbariyubaclub@gmail.com" icon={Mail} title="Email" subtitle="fulbariyubaclub@gmail.com" />
+            <p style={{ display: 'flex', gap: '3px', alignItems: 'center'}}> <img src="/mail.png" alt="" style={{ width: '32px', height: '24px', alignItems: 'center'}} /> <a href="https://mail.google.com/mail/?view=cm&fs=1&to=fulbariyubaclub@gmail.com">fulbariyubaclub@gmail.com</a></p>
             <p style={{ marginTop: '8px' }}>📘 +977 9709192259</p>
             <p style={{ marginTop: '8px' }}>📘 +977 9861949067</p>
           </div>
         </div>
       </div>
 
-      <div style={{ borderTop: '1px solid #374151', padding: '1.5rem 0', alignItems: 'center', flexWrap: 'wrap' }}>
+      <div style={{ borderTop: '1px solid #374151', padding: '1.5rem 0', textAlign: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
         <p style={{ fontSize: '0.82rem', color: '#6B7280' }}>
           © {new Date().getFullYear()} Fulbari Yuba Club Jakma. All rights reserved.
         </p>
