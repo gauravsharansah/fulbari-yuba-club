@@ -4,7 +4,6 @@ import { useAuth } from '../context/AuthContext.jsx';
 
 const Navbar = () => {
   const { user, logout, setShowAdminModal } = useAuth();
-  const { t } = useLang();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -16,7 +15,6 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Scroll to top on any navigation
   const handleNavClick = () => {
     window.scrollTo({ top: 0, behavior: 'instant' });
     setMobileOpen(false);
@@ -42,14 +40,14 @@ const Navbar = () => {
   };
 
   const links = [
-    { to: '/', key: 'nav_home' },
-    { to: '/about', key: 'nav_about' },
-    { to: '/programs', key: 'nav_programs' },
-    { to: '/awards', key: 'nav_awards' },
-    { to: '/blog', key: 'nav_blog' },
-    { to: '/gallery', key: 'nav_gallery' },
-    { to: '/team', key: 'nav_team' },
-    { to: '/contact', key: 'nav_contact' },
+    { to: '/', label: 'Home' },
+    { to: '/about', label: 'About' },
+    { to: '/programs', label: 'Programs' },
+    { to: '/awards', label: 'Awards' },
+    { to: '/blog', label: 'Blog' },
+    { to: '/gallery', label: 'Gallery' },
+    { to: '/team', label: 'Team' },
+    { to: '/contact', label: 'Contact' },
   ];
 
   const navLinkStyle = (isActive) => ({
@@ -112,7 +110,7 @@ const Navbar = () => {
                 onClick={handleNavClick}
                 style={({ isActive }) => navLinkStyle(isActive)}
               >
-                {t(l.key)}
+                {l.label}
               </NavLink>
             ))}
           </div>
@@ -126,7 +124,7 @@ const Navbar = () => {
                   onClick={handleNavClick}
                   className="btn btn-primary btn-sm"
                 >
-                  {t('nav_dashboard')}
+                  Dashboard
                 </Link>
                 <div style={{ position: 'relative' }}>
                   <button
@@ -170,7 +168,7 @@ const Navbar = () => {
                           fontFamily: 'var(--font)',
                         }}
                       >
-                        {t('nav_logout')}
+                        Logout
                       </button>
                     </div>
                   )}
@@ -181,7 +179,7 @@ const Navbar = () => {
                 onClick={handleAdminClick}
                 className="btn btn-primary btn-sm"
               >
-                🔐 {t('nav_admin')}
+                🔐 Admin
               </button>
             )}
 
@@ -227,22 +225,22 @@ const Navbar = () => {
                     textDecoration: 'none',
                   })}
                 >
-                  {t(l.key)}
+                  {l.label}
                 </NavLink>
               ))}
               <div style={{ marginTop: '1rem' }}>
                 {user && user.role === 'admin' ? (
                   <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                     <Link to="/admin" onClick={handleNavClick} className="btn btn-primary" style={{ flex: 1, justifyContent: 'center' }}>
-                      {t('nav_dashboard')}
+                      Dashboard
                     </Link>
                     <button onClick={handleLogout} className="btn btn-outline" style={{ flex: 1, justifyContent: 'center' }}>
-                      {t('nav_logout')}
+                      Logout
                     </button>
                   </div>
                 ) : (
                   <button onClick={handleAdminClick} className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
-                    🔐 {t('nav_admin')}
+                    🔐 Admin
                   </button>
                 )}
               </div>
