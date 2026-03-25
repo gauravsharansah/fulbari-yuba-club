@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+//import { useLang } from '../context/LanguageContext.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 import { PostGalleryModal } from '../components/PostModals.jsx';
 import API from '../utils/api.js';
@@ -7,6 +8,7 @@ const EMOJIS = ['⚽', '🏆', '👥', '🎭', '🏅', '🌄', '🤝', '🎯', '
 const CATS = ['all', 'match', 'event', 'training', 'community', 'cultural'];
 
 const GalleryPage = () => {
+  const { t } = useLang();
   const { isAdmin } = useAuth();
   const [photos, setPhotos] = useState([]);
   const [filter, setFilter] = useState('all');
@@ -26,7 +28,7 @@ const GalleryPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this photo?')) return;
+    if (!window.confirm(t('confirm_delete'))) return;
     try {
       await API.delete(`/gallery/${id}`);
       setPhotos(prev => prev.filter(p => p._id !== id));
@@ -39,9 +41,9 @@ const GalleryPage = () => {
     <div style={{ paddingTop: 'var(--navbar-h)' }}>
       <section style={{ background: 'linear-gradient(135deg,#7B0A1A,#C8102E)', padding: '56px 0' }}>
         <div className="container" style={{ textAlign: 'center' }}>
-          <span className="section-tag" style={{ background: 'rgba(255,255,255,0.15)', color: 'white' }}>Photos</span>
-          <h1 style={{ fontSize: 'clamp(1.8rem,4vw,2.8rem)', fontWeight: 800, color: 'white', margin: '0.75rem 0' }}>Our Gallery</h1>
-          <p style={{ color: 'rgba(255,255,255,0.75)' }}>Moments from Fulbari Yuba Club Jakma</p>
+          <span className="section-tag" style={{ background: 'rgba(255,255,255,0.15)', color: 'white' }}>{t('gallery_tag')}</span>
+          <h1 style={{ fontSize: 'clamp(1.8rem,4vw,2.8rem)', fontWeight: 800, color: 'white', margin: '0.75rem 0' }}>{t('gallery_title')}</h1>
+          <p style={{ color: 'rgba(255,255,255,0.75)' }}>{t('gallery_subtitle')}</p>
         </div>
       </section>
 
@@ -58,18 +60,19 @@ const GalleryPage = () => {
                   color: filter === c ? 'white' : 'var(--gray-600)',
                   transition: 'all 0.2s',
                 }}>
-                  {c === 'all' ? 'All Photos' : c.charAt(0).toUpperCase() + c.slice(1)}
+                  {c === 'all' ? t('all_photos') : c.charAt(0).toUpperCase() + c.slice(1)}
                 </button>
               ))}
             </div>
             {isAdmin && (
-              <button className="btn btn-primary" onClick={() => setShowModal(true)}>+ Add Photos</button>
+              <button className="btn btn-primary" onClick={() => setShowModal(true)}>{t('add_photos_btn')}</button>
             )}
           </div>
 
           {loading ? (
             <div className="loading-center"><div className="spinner"></div></div>
           ) : list.length === 0 && photos.length === 0 ? (
+            // Show placeholder emojis when no photos yet
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(200px,1fr))', gap: '1rem' }}>
               {EMOJIS.map((e, i) => (
                 <div key={i} style={{
