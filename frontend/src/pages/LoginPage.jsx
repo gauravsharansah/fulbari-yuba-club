@@ -15,22 +15,17 @@ const LoginPage = () => {
     setLoading(true);
     setError('');
 
-    let user = null;
     try {
-      user = await login(form.email, form.password);
+      const user = await login(form.email, form.password);
+      if (user?.role === 'admin') {
+        navigate('/admin');
+      } else {
+        setError('Access denied. Admin credentials required.');
+      }
     } catch (err) {
-      // login threw — bad credentials or server error
       setError(err.response?.data?.message || 'Invalid credentials. Please try again.');
-      setLoading(false);
-      return; // ← never reaches navigate
-    }
-
-    // login resolved — check role before navigating
-    if (user && user.role === 'admin') {
-      navigate('/admin');
-    } else {
-      setError('Access denied. Admin credentials required.');
-      setLoading(false);
+    } finally {
+      setLoading(false); // ← always resets, no matter what happens
     }
   };
 
