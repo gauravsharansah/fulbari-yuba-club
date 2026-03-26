@@ -14,9 +14,13 @@ API.interceptors.response.use(
   (res) => res,
   (err) => {
     if (err.response?.status === 401) {
-      localStorage.removeItem('fyc_token');
-      localStorage.removeItem('fyc_user');
-      window.location.href = '/';
+      // Never redirect on the login request itself — let the page handle the error.
+      const isLoginRequest = err.config?.url?.includes('/auth/login');
+      if (!isLoginRequest) {
+        localStorage.removeItem('fyc_token');
+        localStorage.removeItem('fyc_user');
+        window.location.href = '/';
+      }
     }
     return Promise.reject(err);
   }
