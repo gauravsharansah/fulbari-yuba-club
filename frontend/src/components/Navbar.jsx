@@ -3,7 +3,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 
 const Navbar = () => {
-  const { user, logout, setShowAdminModal } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -31,12 +31,8 @@ const Navbar = () => {
 
   const handleAdminClick = () => {
     setMobileOpen(false);
-    if (user && user.role === 'admin') {
-      navigate('/admin');
-      window.scrollTo({ top: 0, behavior: 'instant' });
-    } else {
-      setShowAdminModal(true);
-    }
+    navigate(user && user.role === 'admin' ? '/admin' : '/login');
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   const links = [
