@@ -690,46 +690,46 @@ const AdminPage = () => {
           </>
         );
 
-      // ── Manage Admins (untouched) ────────────────────────────────────────────
-      case 'admins':
-        return (
-          <>
-            <div style={{ background: '#FEF3C7', border: '1px solid #FDE68A', borderRadius: '10px', padding: '1rem 1.5rem', marginBottom: '1.5rem', fontSize: '0.88rem', color: '#92400E' }}>
-              <strong>ℹ️ Multiple Admins:</strong> Accounts added here have full dashboard access. You can also seed admin accounts via backend environment variables (ADMIN_2_EMAIL, ADMIN_2_PASSWORD, etc.).
-            </div>
-            <Card title="🔐 Add New Admin Account">
-              <Grid2>
-                <Field label="Admin Name *">
-                  <input className="form-input" value={adminForm.name} onChange={e => setAdminForm({ ...adminForm, name: e.target.value })} placeholder="Admin's full name" />
-                </Field>
-                <Field label="Admin Email *">
-                  <input className="form-input" type="email" value={adminForm.email} onChange={e => setAdminForm({ ...adminForm, email: e.target.value })} placeholder="admin2@fycjakma.com" />
-                </Field>
-              </Grid2>
-              <Field label="Password *">
-                <input className="form-input" type="password" value={adminForm.password} onChange={e => setAdminForm({ ...adminForm, password: e.target.value })} placeholder="Minimum 8 characters" />
-              </Field>
-              <div style={{ textAlign: 'right', marginTop: '1rem' }}>
-                <button className="btn btn-primary" onClick={submitAdmin} disabled={submitting}>
-                  {submitting ? 'Adding...' : '🔐 Add Admin'}
-                </button>
-              </div>
-            </Card>
-            <Card title={`Current Admins (${admins.length})`}>
-              <Table
-                cols={['Name', 'Email', 'Created', 'Actions']}
-                rows={admins.map(a => [
-                  <span style={{ fontWeight: 600 }}>{a.name}</span>,
-                  a.email,
-                  new Date(a.createdAt).toLocaleDateString('en-GB'),
-                  a._id === user.id
-                    ? <span style={{ fontSize: '0.78rem', color: 'var(--gray-400)' }}>You</span>
-                    : <DelBtn onClick={() => del('user', a._id)} />,
-                ])}
-              />
-            </Card>
-          </>
-        );
+      // // ── Manage Admins (untouched) ────────────────────────────────────────────
+      // case 'admins':
+      //   return (
+      //     <>
+      //       <div style={{ background: '#FEF3C7', border: '1px solid #FDE68A', borderRadius: '10px', padding: '1rem 1.5rem', marginBottom: '1.5rem', fontSize: '0.88rem', color: '#92400E' }}>
+      //         <strong>ℹ️ Multiple Admins:</strong> Accounts added here have full dashboard access. You can also seed admin accounts via backend environment variables (ADMIN_2_EMAIL, ADMIN_2_PASSWORD, etc.).
+      //       </div>
+      //       <Card title="🔐 Add New Admin Account">
+      //         <Grid2>
+      //           <Field label="Admin Name *">
+      //             <input className="form-input" value={adminForm.name} onChange={e => setAdminForm({ ...adminForm, name: e.target.value })} placeholder="Admin's full name" />
+      //           </Field>
+      //           <Field label="Admin Email *">
+      //             <input className="form-input" type="email" value={adminForm.email} onChange={e => setAdminForm({ ...adminForm, email: e.target.value })} placeholder="admin2@fycjakma.com" />
+      //           </Field>
+      //         </Grid2>
+      //         <Field label="Password *">
+      //           <input className="form-input" type="password" value={adminForm.password} onChange={e => setAdminForm({ ...adminForm, password: e.target.value })} placeholder="Minimum 8 characters" />
+      //         </Field>
+      //         <div style={{ textAlign: 'right', marginTop: '1rem' }}>
+      //           <button className="btn btn-primary" onClick={submitAdmin} disabled={submitting}>
+      //             {submitting ? 'Adding...' : '🔐 Add Admin'}
+      //           </button>
+      //         </div>
+      //       </Card>
+      //       <Card title={`Current Admins (${admins.length})`}>
+      //         <Table
+      //           cols={['Name', 'Email', 'Created', 'Actions']}
+      //           rows={admins.map(a => [
+      //             <span style={{ fontWeight: 600 }}>{a.name}</span>,
+      //             a.email,
+      //             new Date(a.createdAt).toLocaleDateString('en-GB'),
+      //             a._id === user.id
+      //               ? <span style={{ fontSize: '0.78rem', color: 'var(--gray-400)' }}>You</span>
+      //               : <DelBtn onClick={() => del('user', a._id)} />,
+      //           ])}
+      //         />
+      //       </Card>
+      //     </>
+      //   );
 
       // ── Messages (untouched) ─────────────────────────────────────────────────
       case 'messages':
