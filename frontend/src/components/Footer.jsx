@@ -45,10 +45,10 @@ const Footer = () => (
         <div>
           <h4 style={{ color: 'white', fontWeight: 700, fontSize: '0.85rem', letterSpacing: '1px', textAlign: 'center', textTransform: 'uppercase', marginBottom: '1rem' }}>Social Media</h4>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '10px'}}>
-            <a href='https://www.facebook.com/profile.php?id=100084950064757'><img src="/facebook.png" alt="" style={{ width: '60px', height: '40px', alignItems: 'center'}}/></a>
-            <a href='https://www.tiktok.com/@fycjakma'><img src="/tiktok.jpeg" alt="" style={{ width: '40px', height: '40px', alignItems: 'center'}} /></a>
-            <a href='https://www.youtube.com/@fulbariyubaclub'><img src="/youtube.png" alt="" style={{ width: '40px', height: '36px', alignItems: 'top'}}/></a>
-            <a href='https://www.facebook.com/profile.php?id=100084950064757'><img src="/instagram.png" alt="" style={{ width: '40px', height: '40px', alignItems: 'center'}}/></a>
+            <a href='https://www.facebook.com/profile.php?id=100084950064757' target='_blank'><img src="/facebook.png" alt="" style={{ width: '60px', height: '40px', alignItems: 'center'}}/></a>
+            <a href='https://www.tiktok.com/@fycjakma' target='_blank'><img src="/tiktok.png" alt="" style={{ width: '40px', height: '40px', alignItems: 'center'}} /></a>
+            <a href='https://www.youtube.com/@fulbariyubaclub' target='_blank'><img src="/youtube.png" alt="" style={{ width: '40px', height: '36px', alignItems: 'top'}}/></a>
+            <a href='https://www.facebook.com/profile.php?id=100084950064757' target='_blank'><img src="/instagram.png" alt="" style={{ width: '40px', height: '40px', alignItems: 'center'}}/></a>
           </div>
         </div>
 
