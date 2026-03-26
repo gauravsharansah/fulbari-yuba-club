@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link,NavLink } from 'react-router-dom';
+import { STATIC_CERTIFICATES } from '../data/certificates';
 import API from '../utils/api';
 
 const handleNavClick = () => {
@@ -35,14 +36,22 @@ const STATIC_STATS = [
 ];
 
 const HomePage = () => {
-  const [programs, setPrograms] = useState([]);
+  // const [programs, setPrograms] = useState([]);
+  // const [loading, setLoading] = useState(true);
+
+  // useEffect(() => {
+  //   API.get('/programs?limit=3').then(r => setPrograms(r.data.data || [])).catch(() => setPrograms(STATIC_PROGRAMS)).finally(() => setLoading(false));
+  // }, []);
+
+  // const displayPrograms = programs.length > 0 ? programs : STATIC_PROGRAMS;
+  const [certificates, setCertificates] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    API.get('/programs?limit=3').then(r => setPrograms(r.data.data || [])).catch(() => setPrograms(STATIC_PROGRAMS)).finally(() => setLoading(false));
+    API.get('/certificates?limit=3').then(r => setCertificates(r.data.data || [])).catch(() => setCertificates(STATIC_CERTIFICATES)).finally(() => setLoading(false));
   }, []);
 
-  const displayPrograms = programs.length > 0 ? programs : STATIC_PROGRAMS;
+  const displayCertificates = certificates.length > 0 ? certificates : STATIC_CERTIFICATES;
 
   return (
     <div style={{ paddingTop: 'var(--navbar-h)' }}>
@@ -181,7 +190,7 @@ const HomePage = () => {
       </section>
 
       {/* ---- RECENT PROGRAMS ---- */}
-      <section className="section" style={{ background: 'white' }}>
+      {/* <section className="section" style={{ background: 'white' }}>
         <div className="container">
           <div className="section-header">
             <span className="section-tag">Latest Activities</span>
@@ -230,6 +239,77 @@ const HomePage = () => {
           )}
           <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
             <NavLink to="/programs" onClick={handleNavClick} className="btn btn-outline btn-lg">View All Programs →</NavLink>
+          </div>
+        </div>
+      </section> */}
+
+      <section className="section" style={{ background: 'white' }}>
+        <div className="container">
+          <div className="section-header">
+            <span className="section-tag">Latest Activities</span>
+            <h2 className="section-title">Recent Achievements</h2>
+            <p className="section-subtitle">Competitions in which FYC Jakma had remarkable performance</p>
+          </div>
+
+          <div className="grid-3">
+            {STATIC_CERTIFICATES.slice(0, 3).map(cert => (
+              <div key={cert._id} className="card">
+                {/* Image / Banner */}
+                <div style={{
+                  height: '180px',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  background: '#FCE7E9'
+                }}>
+                  {cert.image ? (
+                    <img
+                      src={cert.image}
+                      alt={cert.title}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                  ) : (
+                    <div style={{
+                      width: '100%', height: '100%',
+                      background: 'linear-gradient(135deg, #FEF2F2, #FCE7E9)'
+                    }} />
+                  )}
+                </div>
+
+                {/* Content */}
+                <div style={{ padding: '1.5rem' }}>
+                  <span style={{
+                    background: '#FEF2F2', color: '#DC2626',
+                    fontSize: '0.7rem', fontWeight: 700,
+                    padding: '3px 10px', borderRadius: '20px'
+                  }}>
+                    {cert.issuer}
+                  </span>
+                  <h3 style={{
+                    marginTop: '0.75rem', fontWeight: 700,
+                    color: 'var(--gray-900)', lineHeight: 1.3, marginBottom: '0.5rem'
+                  }}>
+                    {cert.title}
+                  </h3>
+                  <p style={{
+                    color: 'var(--gray-500)', fontSize: '0.88rem',
+                    lineHeight: 1.6, marginBottom: '1rem'
+                  }}>
+                    {cert.description}
+                  </p>
+                  <div style={{
+                    fontSize: '0.8rem', color: 'var(--gray-400)'
+                  }}>
+                    📅 {cert.yearBS}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
+            <NavLink to="/awards" onClick={handleNavClick} className="btn btn-outline btn-lg">
+              View All Awards →
+            </NavLink>
           </div>
         </div>
       </section>
