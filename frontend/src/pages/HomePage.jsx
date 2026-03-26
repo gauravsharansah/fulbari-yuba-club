@@ -35,6 +35,12 @@ const STATIC_STATS = [
   { num: '2+', label: 'Programs Per Year', icon: '🏆' },
 ];
 
+// Add your sponsors here. Set logo to a path in /public, or null to show initials.
+const SPONSORS = [
+  { id: 's1', name: 'Sponsor 1', logo: '/logo.png' },
+  { id: 's2', name: 'Sponsor 2', logo: '/logo.png' },
+];
+
 const HomePage = () => {
   // const [programs, setPrograms] = useState([]);
   // const [loading, setLoading] = useState(true);
@@ -359,6 +365,115 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+
+      {/* ---- SPONSORS ---- */}
+      {SPONSORS.length > 0 && (
+        <section className="section-sm" style={{ background: 'white', borderTop: '1px solid var(--gray-100)' }}>
+          <div className="container">
+            <div className="section-header" style={{ marginBottom: '2rem' }}>
+              <span className="section-tag">Our Supporters</span>
+              <h2 className="section-title">Sponsors & Partners</h2>
+              <p className="section-subtitle">Organizations that support FYC Jakma's mission</p>
+            </div>
+
+            <div className="sponsors-grid">
+              {SPONSORS.map(sp => (
+                <div key={sp.id} className="sponsor-card">
+                  <div className="sponsor-logo-wrap">
+                    {sp.logo ? (
+                      <img
+                        src={sp.logo}
+                        alt={sp.name}
+                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                      />
+                    ) : (
+                      <div className="sponsor-initials">
+                        {sp.name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase()}
+                      </div>
+                    )}
+                  </div>
+                  <p className="sponsor-name">{sp.name}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <style>{`
+            .sponsors-grid {
+              display: flex;
+              flex-wrap: wrap;
+              justify-content: center;
+              gap: 1.5rem;
+            }
+            .sponsor-card {
+              flex: 0 0 calc(20% - 1.2rem);
+              max-width: calc(20% - 1.2rem);
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              gap: 0.75rem;
+              padding: 1.5rem 1rem;
+              border: 1px solid var(--gray-200);
+              border-radius: 12px;
+              background: var(--gray-50);
+              transition: box-shadow 0.2s, transform 0.2s;
+            }
+            .sponsor-card:hover {
+              box-shadow: 0 6px 24px rgba(200,16,46,0.08);
+              transform: translateY(-3px);
+            }
+            .sponsor-logo-wrap {
+              width: 90px;
+              height: 70px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+            .sponsor-initials {
+              width: 70px;
+              height: 70px;
+              border-radius: 50%;
+              background: linear-gradient(135deg, #FEF2F2, #FCE7E9);
+              border: 2px solid #FECACA;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 1.4rem;
+              font-weight: 800;
+              color: #C8102E;
+            }
+            .sponsor-name {
+              font-size: 0.82rem;
+              font-weight: 600;
+              color: var(--gray-700);
+              text-align: center;
+              line-height: 1.4;
+              margin: 0;
+            }
+            @media (max-width: 1024px) {
+              .sponsor-card {
+                flex: 0 0 calc(33.333% - 1.2rem);
+                max-width: calc(33.333% - 1.2rem);
+              }
+            }
+            @media (max-width: 640px) {
+              .sponsor-card {
+                flex: 0 0 calc(50% - 0.75rem);
+                max-width: calc(50% - 0.75rem);
+              }
+              .sponsors-grid {
+                gap: 1rem;
+              }
+            }
+            @media (max-width: 360px) {
+              .sponsor-card {
+                flex: 0 0 100%;
+                max-width: 100%;
+              }
+            }
+          `}</style>
+        </section>
+      )}
 
     </div>
   );
