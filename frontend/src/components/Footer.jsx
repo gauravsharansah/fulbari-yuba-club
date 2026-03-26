@@ -25,7 +25,7 @@ const Footer = () => (
 
         <div>
           <h4 style={{ color: 'white', fontWeight: 700, fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '1rem' }}>Quick Links</h4>
-          {[['/', 'Home'], ['/about', 'About Us'], ['/programs', 'Programs'], ['/blog', 'Blog'], ['/gallery', 'Gallery']].map(([to, label]) => (
+          {[['/', 'Home'], ['/about', 'About Us'], ['/programs', 'Programs'], ['/notices', 'Notices'], ['/gallery', 'Gallery']].map(([to, label]) => (
             <NavLink key={to} to={to} onClick={handleNavClick} end={to === '/'} style={{ display: 'block', color: '#9CA3AF', fontSize: '0.88rem', marginBottom: '8px', transition: 'color 0.2s'}}
               onMouseEnter={e => e.target.style.color = 'white'} onMouseLeave={e => e.target.style.color = '#9CA3AF'}>
               {label}

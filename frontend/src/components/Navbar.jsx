@@ -44,7 +44,7 @@ const Navbar = () => {
     { to: '/about', label: 'About' },
     { to: '/programs', label: 'Programs' },
     { to: '/awards', label: 'Awards' },
-    { to: '/blog', label: 'Blog' },
+    { to: '/notices', label: 'Notices' },
     { to: '/gallery', label: 'Gallery' },
     { to: '/team', label: 'Team' },
     { to: '/contact', label: 'Contact' },

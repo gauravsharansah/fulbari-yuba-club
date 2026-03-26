@@ -150,27 +150,30 @@ export const PostAwardModal = ({ onClose, onSuccess }) => {
   );
 };
 
-// ─── Post Blog Modal ──────────────────────────────────────────────────────────
-export const PostBlogModal = ({ onClose, onSuccess }) => {
+// ─── Post Notice Modal ──────────────────────────────────────────────────────────
+export const PostNoticeModal = ({ onClose, onSuccess }) => {
   const [form, setForm] = useState({
-    title: '', category: 'news', summary: '', content: '',
-    author: 'FYC Admin', tags: '', status: 'published',
+    title: '',
+    category: 'general',
+    priority: 'normal',
+    author: 'FYC Admin',
+    body: '',
+    featured: false,
+    status: 'active',
   });
-  const [coverImage, setCoverImage] = useState(null);
+  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const submit = async () => {
-    if (!form.title || !form.content) {
-      setError('Title and Content are required.');
+    if (!form.title || !form.body) {
+      setError('Title and Body are required.');
       return;
     }
     setLoading(true);
     try {
-      const fd = new FormData();
-      Object.entries(form).forEach(([k, v]) => { if (v) fd.append(k, v); });
-      if (coverImage) fd.append('coverImage', coverImage);
-      const { data } = await API.post('/blogs', fd);
+      const payload = { ...form, featured: form.featured ? true : false };
+      const { data } = await API.post('/notices', payload);
       onSuccess(data.data);
       onClose();
     } catch (e) {
@@ -181,47 +184,54 @@ export const PostBlogModal = ({ onClose, onSuccess }) => {
   };
 
   return (
-    <ModalShell title="Post New Blog" onClose={onClose}>
+    <ModalShell title="Post New Notice" onClose={onClose}>
       {error && <ErrBox msg={error} />}
       <G2>
         <F label="Title *">
-          <input className="form-input" value={form.title} onChange={e => setForm({...form, title: e.target.value})} placeholder="Blog post title..." />
+          <input className="form-input" value={form.title} onChange={e => setForm({...form, title: e.target.value})} placeholder="e.g. Annual General Meeting 2083" />
         </F>
         <F label="Category">
           <select className="form-input" value={form.category} onChange={e => setForm({...form, category: e.target.value})}>
-            <option value="news">News</option>
-            <option value="match">Match</option>
-            <option value="announcement">Announcement</option>
-            <option value="community">Community</option>
-            <option value="achievement">Achievement</option>
+            <option value="general">General</option>
+            <option value="event">Event</option>
+            <option value="urgent">Urgent</option>
+            <option value="meeting">Meeting</option>
+            <option value="sports">Sports</option>
+          </select>
+        </F>
+        <F label="Priority">
+          <select className="form-input" value={form.priority} onChange={e => setForm({...form, priority: e.target.value})}>
+            <option value="normal">Normal</option>
+            <option value="high">High</option>
+            <option value="low">Low</option>
           </select>
         </F>
         <F label="Author">
-          <input className="form-input" value={form.author} onChange={e => setForm({...form, author: e.target.value})} />
-        </F>
-        <F label="Status">
-          <select className="form-input" value={form.status} onChange={e => setForm({...form, status: e.target.value})}>
-            <option value="published">Published</option>
-            <option value="draft">Draft</option>
-          </select>
+          <input className="form-input" value={form.author} onChange={e => setForm({...form, author: e.target.value})} placeholder="e.g. Club Secretary" />
         </F>
       </G2>
-      <F label="Summary">
-        <textarea className="form-input" rows="2" value={form.summary} onChange={e => setForm({...form, summary: e.target.value})} placeholder="Short summary shown on the card..." />
+      <F label="Body *">
+        <textarea
+          className="form-input"
+          rows="7"
+          value={form.body}
+          onChange={e => setForm({...form, body: e.target.value})}
+          placeholder="Full notice content. Use new lines to separate paragraphs or agenda items..."
+        />
       </F>
-      <F label="Content *">
-        <textarea className="form-input" rows="8" value={form.content} onChange={e => setForm({...form, content: e.target.value})} placeholder="Full blog post content..." />
-      </F>
-      <F label="Cover Image (optional)">
-        <input type="file" className="form-input" accept="image/*" style={{padding:'8px'}}
-          onChange={e => setCoverImage(e.target.files[0] || null)} />
-        {coverImage && <p style={{fontSize:'0.8rem',color:'#166534',marginTop:'4px'}}>✓ {coverImage.name}</p>}
-        <p style={{fontSize:'0.75rem',color:'var(--gray-400)',marginTop:'4px'}}>Leave blank to show the default 📄 icon.</p>
-      </F>
-      <F label="Tags">
-        <input className="form-input" value={form.tags} onChange={e => setForm({...form, tags: e.target.value})} placeholder="football, tournament, community" />
-      </F>
-      <Actions onClose={onClose} onSubmit={submit} loading={loading} label="Publish Post" />
+      <div style={{display:'flex',alignItems:'center',gap:'10px',padding:'10px 14px',background:'var(--gray-50)',borderRadius:'8px',border:'1px solid var(--gray-200)',marginBottom:'0.5rem'}}>
+        <input
+          type="checkbox"
+          id="notice-featured"
+          checked={form.featured}
+          onChange={e => setForm({...form, featured: e.target.checked})}
+          style={{accentColor:'#C8102E',width:'16px',height:'16px',cursor:'pointer'}}
+        />
+        <label htmlFor="notice-featured" style={{fontSize:'0.85rem',fontWeight:600,color:'var(--gray-700)',cursor:'pointer'}}>
+          📌 Pin this notice (shows at top of notice board)
+        </label>
+      </div>
+      <Actions onClose={onClose} onSubmit={submit} loading={loading} label="Post Notice" />
     </ModalShell>
   );
 };

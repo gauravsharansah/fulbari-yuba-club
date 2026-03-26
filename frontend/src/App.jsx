@@ -10,7 +10,7 @@ import HomePage from './pages/HomePage.jsx';
 import AboutPage from './pages/AboutPage.jsx';
 import ProgramsPage from './pages/ProgramsPage.jsx';
 import AwardsPage from './pages/AwardsPage.jsx';
-import BlogPage from './pages/BlogPage.jsx';
+import NoticePage from './pages/NoticePage.jsx';
 import GalleryPage from './pages/GalleryPage.jsx';
 import { TeamPage, ContactPage } from './pages/OtherPages.jsx';
 import LoginPage from './pages/LoginPage.jsx';
@@ -43,7 +43,7 @@ function App() {
           <Route path="/about" element={<Layout><AboutPage /></Layout>} />
           <Route path="/programs" element={<Layout><ProgramsPage /></Layout>} />
           <Route path="/awards" element={<Layout><AwardsPage /></Layout>} />
-          <Route path="/blog" element={<Layout><BlogPage /></Layout>} />
+          <Route path="/notices" element={<Layout><NoticePage /></Layout>} />
           <Route path="/gallery" element={<Layout><GalleryPage /></Layout>} />
           <Route path="/team" element={<Layout><TeamPage /></Layout>} />
           <Route path="/contact" element={<Layout><ContactPage /></Layout>} />
