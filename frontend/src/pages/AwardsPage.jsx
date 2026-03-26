@@ -99,44 +99,71 @@ const AwardsPage = () => {
                 const imgSrc = c.image?.url || (typeof c.image === 'string' ? c.image : null);
 
                 return (
-                  <div key={c._id} className="card" style={{ padding: '2rem', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
-                    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '4px', background: 'linear-gradient(90deg,#C8102E,#E8304A)' }} />
+                  <div key={c._id} className="card" style={{ position: 'relative', overflow: 'hidden' }}>
 
-                    {/* Image or emoji icon */}
-                    {imgSrc ? (
-                      <img src={imgSrc} alt={c.title} style={{ width: '80px', height: '80px', objectFit: 'contain', marginBottom: '1rem', borderRadius: '8px' }} />
-                    ) : (
-                      <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>{c.icon || '🏆'}</div>
-                    )}
-
-                    <h3 style={{ fontWeight: 700, color: 'var(--gray-900)', marginBottom: '0.5rem', lineHeight: 1.3 }}>
-                      {c.title}
-                    </h3>
-                    <div style={{ fontSize: '0.82rem', fontWeight: 600, color: '#C8102E', marginBottom: '4px' }}>
-                      {c.issuer}
+                    {/* Full-width banner image */}
+                    <div style={{
+                      height: '180px',
+                      position: 'relative',
+                      overflow: 'hidden',
+                      background: 'linear-gradient(135deg, #FEF2F2, #FCE7E9)'
+                    }}>
+                      {imgSrc ? (
+                        <img
+                          src={imgSrc}
+                          alt={c.title}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                      ) : (
+                        <div style={{ width: '100%', height: '100%', background: 'linear-gradient(135deg, #FEF2F2, #FCE7E9)' }} />
+                      )}
                     </div>
-                    <div style={{ fontSize: '0.78rem', color: 'var(--gray-400)', marginBottom: '0.75rem' }}>
-                      {c.yearBS || c.yearAD}
-                    </div>
-                    {c.description && (
-                      <p style={{ fontSize: '0.85rem', color: 'var(--gray-500)', lineHeight: 1.6 }}>
-                        {c.description}
-                      </p>
-                    )}
 
-                    {canDelete && (
-                      <button
-                        onClick={() => handleDelete(c._id, c.createdAt)}
-                        style={{ marginTop: '1rem', background: '#FEF2F2', color: '#C8102E', border: '1px solid #FECACA', borderRadius: '6px', padding: '5px 14px', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font)' }}
-                      >
-                        Delete
-                      </button>
-                    )}
-                    {tooOld && (
-                      <div style={{ marginTop: '0.75rem', background: '#F9FAFB', border: '1px solid var(--gray-200)', borderRadius: '6px', padding: '5px 10px', fontSize: '0.72rem', color: 'var(--gray-400)', textAlign: 'center', lineHeight: 1.4 }}>
-                        🔒 Locked (older than 5 days)
+                    {/* Card content */}
+                    <div style={{ padding: '1.5rem' }}>
+                      <span style={{
+                        background: '#FEF2F2', color: '#C8102E',
+                        fontSize: '0.7rem', fontWeight: 700,
+                        padding: '3px 10px', borderRadius: '20px',
+                        display: 'inline-block'
+                      }}>
+                        {c.issuer}
+                      </span>
+
+                      <h3 style={{
+                        marginTop: '0.75rem', fontWeight: 700,
+                        color: 'var(--gray-900)', lineHeight: 1.3, marginBottom: '0.5rem'
+                      }}>
+                        {c.title}
+                      </h3>
+
+                      {c.description && (
+                        <p style={{
+                          color: 'var(--gray-500)', fontSize: '0.88rem',
+                          lineHeight: 1.6, marginBottom: '1rem'
+                        }}>
+                          {c.description}
+                        </p>
+                      )}
+
+                      <div style={{ fontSize: '0.8rem', color: 'var(--gray-400)' }}>
+                        📅 {c.yearBS || c.yearAD}
                       </div>
-                    )}
+
+                      {canDelete && (
+                        <button
+                          onClick={() => handleDelete(c._id, c.createdAt)}
+                          style={{ marginTop: '1rem', background: '#FEF2F2', color: '#C8102E', border: '1px solid #FECACA', borderRadius: '6px', padding: '5px 14px', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer', fontFamily: 'var(--font)' }}
+                        >
+                          Delete
+                        </button>
+                      )}
+                      {tooOld && (
+                        <div style={{ marginTop: '0.75rem', background: '#F9FAFB', border: '1px solid var(--gray-200)', borderRadius: '6px', padding: '5px 10px', fontSize: '0.72rem', color: 'var(--gray-400)', textAlign: 'center', lineHeight: 1.4 }}>
+                          🔒 Locked (older than 5 days)
+                        </div>
+                      )}
+                    </div>
                   </div>
                 );
               })}
