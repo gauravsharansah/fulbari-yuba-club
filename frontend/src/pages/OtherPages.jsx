@@ -134,18 +134,53 @@ export const TeamPage = () => (
 
 export const ContactPage = () => {
   const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
+  const [errors, setErrors] = useState({});
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const validate = () => {
+    const e = {};
+    if (!form.name.trim())
+      e.name = 'Full name is required.';
+    else if (form.name.trim().length < 2)
+      e.name = 'Name must be at least 2 characters.';
+
+    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
+      e.email = 'Please enter a valid email address.';
+
+    if (form.phone && !/^[+\d\s\-().]{7,15}$/.test(form.phone))
+      e.phone = 'Please enter a valid phone number (7-15 digits).';
+
+    if (!form.message.trim())
+      e.message = 'Message is required.';
+    else if (form.message.trim().length < 10)
+      e.message = 'Message must be at least 10 characters.';
+
+    return e;
+  };
+
+  const handleChange = (field, value) => {
+    setForm(prev => ({ ...prev, [field]: value }));
+    if (errors[field]) setErrors(prev => ({ ...prev, [field]: undefined }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setStatus(null);
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+    setErrors({});
     setLoading(true);
     try {
       await API.post('/contact', form);
       setStatus({ type: 'success', msg: 'Message sent successfully! We will get back to you soon.' });
       setForm({ name: '', email: '', phone: '', subject: '', message: '' });
-    } catch {
-      setStatus({ type: 'error', msg: 'Failed to send message. Please try again.' });
+    } catch (err) {
+      const serverMsg = err.response?.data?.message;
+      setStatus({ type: 'error', msg: serverMsg || 'Failed to send message. Please try again.' });
     } finally {
       setLoading(false);
     }
@@ -197,31 +232,66 @@ export const ContactPage = () => {
               <h2 style={{ fontWeight: 800, fontSize: '1.4rem', color: 'var(--gray-900)', marginBottom: '1.5rem' }}>Send a Message</h2>
               {status && (
                 <div style={{ background: status.type === 'success' ? '#D1FAE5' : '#FEE2E2', color: status.type === 'success' ? '#065F46' : '#991B1B', padding: '12px 16px', borderRadius: '8px', marginBottom: '1.5rem', fontWeight: 600, fontSize: '0.9rem' }}>
-                  {status.msg}
+                  {status.type === 'success' ? '✅' : '⚠️'} {status.msg}
                 </div>
               )}
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} noValidate>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                   <div className="form-group">
                     <label className="form-label">Full Name *</label>
-                    <input className="form-input" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="Your name" required />
+                    <input
+                      className="form-input"
+                      value={form.name}
+                      onChange={e => handleChange('name', e.target.value)}
+                      placeholder="Your name"
+                      style={errors.name ? { borderColor: '#C8102E' } : {}}
+                    />
+                    {errors.name && <span style={{ color: '#C8102E', fontSize: '0.75rem', marginTop: '4px', display: 'block' }}>{errors.name}</span>}
                   </div>
                   <div className="form-group">
                     <label className="form-label">Phone</label>
-                    <input className="form-input" value={form.phone} onChange={e => setForm({ ...form, phone: e.target.value })} placeholder="Your phone number" />
+                    <input
+                      className="form-input"
+                      value={form.phone}
+                      onChange={e => handleChange('phone', e.target.value)}
+                      placeholder="Your phone number"
+                      style={errors.phone ? { borderColor: '#C8102E' } : {}}
+                    />
+                    {errors.phone && <span style={{ color: '#C8102E', fontSize: '0.75rem', marginTop: '4px', display: 'block' }}>{errors.phone}</span>}
                   </div>
                 </div>
                 <div className="form-group">
                   <label className="form-label">Email</label>
-                  <input className="form-input" type="email" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} placeholder="your@email.com" />
+                  <input
+                    className="form-input"
+                    type="email"
+                    value={form.email}
+                    onChange={e => handleChange('email', e.target.value)}
+                    placeholder="your@email.com"
+                    style={errors.email ? { borderColor: '#C8102E' } : {}}
+                  />
+                  {errors.email && <span style={{ color: '#C8102E', fontSize: '0.75rem', marginTop: '4px', display: 'block' }}>{errors.email}</span>}
                 </div>
                 <div className="form-group">
                   <label className="form-label">Subject</label>
-                  <input className="form-input" value={form.subject} onChange={e => setForm({ ...form, subject: e.target.value })} placeholder="What is this about?" />
+                  <input
+                    className="form-input"
+                    value={form.subject}
+                    onChange={e => handleChange('subject', e.target.value)}
+                    placeholder="What is this about?"
+                  />
                 </div>
                 <div className="form-group">
                   <label className="form-label">Message *</label>
-                  <textarea className="form-input" rows="5" value={form.message} onChange={e => setForm({ ...form, message: e.target.value })} placeholder="Write your message here..." required />
+                  <textarea
+                    className="form-input"
+                    rows="5"
+                    value={form.message}
+                    onChange={e => handleChange('message', e.target.value)}
+                    placeholder="Write your message here..."
+                    style={errors.message ? { borderColor: '#C8102E' } : {}}
+                  />
+                  {errors.message && <span style={{ color: '#C8102E', fontSize: '0.75rem', marginTop: '4px', display: 'block' }}>{errors.message}</span>}
                 </div>
                 <button type="submit" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '13px' }} disabled={loading}>
                   {loading ? 'Sending...' : 'Send Message'}
