@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
+
+const handleNavClick = () => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    setMobileOpen(false);
+    setUserMenuOpen(false);
+  };
 
 const Footer = () => (
   <footer style={{ background: '#1F2937', color: '#D1D5DB', paddingTop: '56px' }}>
@@ -20,10 +26,10 @@ const Footer = () => (
         <div>
           <h4 style={{ color: 'white', fontWeight: 700, fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '1rem' }}>Quick Links</h4>
           {[['/', 'Home'], ['/about', 'About Us'], ['/programs', 'Programs'], ['/blog', 'Blog'], ['/gallery', 'Gallery']].map(([to, label]) => (
-            <Link key={to} to={to} style={{ display: 'block', color: '#9CA3AF', fontSize: '0.88rem', marginBottom: '8px', transition: 'color 0.2s' }}
+            <NavLink key={to} to={to} onClick={handleNavClick} end={to === '/'} style={{ display: 'block', color: '#9CA3AF', fontSize: '0.88rem', marginBottom: '8px', transition: 'color 0.2s'}}
               onMouseEnter={e => e.target.style.color = 'white'} onMouseLeave={e => e.target.style.color = '#9CA3AF'}>
               {label}
-            </Link>
+            </NavLink>
           ))}
         </div>
 

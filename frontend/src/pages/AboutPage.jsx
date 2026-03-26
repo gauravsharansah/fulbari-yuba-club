@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
+
+const handleNavClick = () => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    setMobileOpen(false);
+    setUserMenuOpen(false);
+  };
 
 // --- Executive Committee ---
 const EXECUTIVES = [
@@ -188,9 +194,9 @@ const AboutPage = () => (
         <p style={{ color: 'rgba(255,255,255,0.8)', marginBottom: '2rem', maxWidth: '440px', margin: '0 auto 2rem' }}>
           Become part of our growing family of football enthusiasts and community builders.
         </p>
-        <Link to="/contact" className="btn btn-lg" style={{ background: 'white', color: '#C8102E', border: '2px solid white', fontWeight: 700 }}>
+        <NavLink to="/contact" onClick={handleNavClick} className="btn btn-lg" style={{ background: 'white', color: '#C8102E', border: '2px solid white', fontWeight: 700 }}>
           Get In Touch
-        </Link>
+        </NavLink>
       </div>
     </section>
 

@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link,NavLink } from 'react-router-dom';
 import API from '../utils/api';
+
+const handleNavClick = () => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    setMobileOpen(false);
+    setUserMenuOpen(false);
+  };
 
 const CATEGORY_COLOR = {
   tournament: { bg: '#FEF2F2', color: '#991B1B', label: 'Tournament' },
@@ -223,7 +229,7 @@ const HomePage = () => {
             </div>
           )}
           <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
-            <Link to="/programs" className="btn btn-outline btn-lg">View All Programs →</Link>
+            <NavLink to="/programs" onClick={handleNavClick} className="btn btn-outline btn-lg">View All Programs →</NavLink>
           </div>
         </div>
       </section>
@@ -249,9 +255,9 @@ const HomePage = () => {
               <blockquote style={{ fontSize: '1.15rem', color: 'rgba(255,255,255,0.9)', lineHeight: 1.8, fontStyle: 'italic', marginBottom: '1.5rem' }}>
                 "Fulbari Yuba Club Jakma stands as a beacon of hope and determination for the youth of Manyavangyag. Our journey since 2057 BS has been one of unity, resilience, and passion for football and community development. Together, we build not just a football club — but a family."
               </blockquote>
-              <Link to="/about" className="btn" style={{ background: 'white', color: '#C8102E', border: '2px solid white', fontWeight: 700 }}>
+              <NavLink to="/about" onClick={handleNavClick} className="btn" style={{ background: 'white', color: '#C8102E', border: '2px solid white', fontWeight: 700 }}>
                 Read More About Us →
-              </Link>
+              </NavLink>
             </div>
           </div>
         </div>
@@ -268,7 +274,7 @@ const HomePage = () => {
             Join Fulbari Yuba Club Jakma and become part of a growing community of young sportspersons.
           </p>
           <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link to="/contact" className="btn btn-primary btn-lg">Contact Us</Link>
+            <NavLink to="/contact" onClick={handleNavClick} className="btn btn-primary btn-lg">Contact Us</NavLink>
             <a href="https://www.facebook.com/profile.php?id=100084950064757" target="_blank" rel="noreferrer" className="btn btn-ghost btn-lg">Follow on Facebook</a>
           </div>
         </div>
