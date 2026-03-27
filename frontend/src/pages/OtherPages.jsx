@@ -187,9 +187,9 @@ export const ContactPage = () => {
   };
 
   const contactItems = [
-    { icon: '📍', title: 'Address',       val: 'Jakma, Manyavangyag Gaun Palika-6 \nOkhaldhunga, Nepal - 56100' },
+    { icon: '📍', title: 'Address',       val: 'Manyavangyag Gaun Palika-6, Jakma, \nOkhaldhunga, Nepal - 56100' },
     { icon: '📘', title: 'Facebook', val: <a href="https://www.facebook.com/profile.php?id=100084950064757" target="_blank">Fulbari Yuba Club Jakma</a> },   // ← change this value
-    { icon: '🌐', title: 'Region',        val: 'Okhaldhunga · Manebhanjyang, Nepal' },
+    { icon: '🌐', title: 'Region',        val: 'Koshi Pradesh,  Nepal' },
     { icon: '🕐', title: 'Founded',       val: '2057 BS (2000 AD)' },
   ];
 
