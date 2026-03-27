@@ -1,32 +1,5 @@
 const mongoose = require('mongoose');
 
-// --- Blog ---
-const blogSchema = new mongoose.Schema({
-  title: { type: String, required: true, trim: true },
-  category: {
-    type: String,
-    enum: ['news', 'match', 'announcement', 'community', 'achievement'],
-    default: 'news'
-  },
-  summary: { type: String, maxlength: 300 },
-  content: { type: String, required: true },
-  coverImage: { url: String, publicId: String },
-  author: { type: String, default: 'FYC Admin' },
-  tags: [String],
-  slug: String,
-  status: { type: String, enum: ['published', 'draft'], default: 'published' },
-  featured: { type: Boolean, default: false },
-  views: { type: Number, default: 0 },
-  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
-}, { timestamps: true });
-
-blogSchema.pre('save', function(next) {
-  if (this.isModified('title')) {
-    this.slug = this.title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-  }
-  next();
-});
-
 // --- Certificate ---
 const certificateSchema = new mongoose.Schema({
   title: { type: String, required: true },
@@ -59,6 +32,17 @@ const gallerySchema = new mongoose.Schema({
   uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
 }, { timestamps: true });
 
+const noticeSchema = new mongoose.Schema({
+  title:    { type: String, required: true },
+  category: { type: String, enum: ['general','event','urgent','meeting','sports'], default: 'general' },
+  priority: { type: String, enum: ['high','normal','low'], default: 'normal' },
+  author:   { type: String, default: 'FYC Admin' },
+  body:     { type: String, required: true },
+  featured: { type: Boolean, default: false },
+  status:   { type: String, enum: ['active','archived'], default: 'active' },
+  expiresAt:{ type: Date, default: null },
+}, { timestamps: true });
+
 // --- Contact Message ---
 const contactSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -71,7 +55,7 @@ const contactSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 module.exports = {
-  Blog: mongoose.model('Blog', blogSchema),
+  Notice: mongoose.model('Notice', noticeSchema),
   Certificate: mongoose.model('Certificate', certificateSchema),
   Gallery: mongoose.model('Gallery', gallerySchema),
   Contact: mongoose.model('Contact', contactSchema)
