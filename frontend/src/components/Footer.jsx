@@ -36,7 +36,7 @@ const Footer = () => (
         <div>
           <h4 style={{ color: 'white', fontWeight: 700, fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase', textAlign: 'center', marginBottom: '1rem' }}>Contact</h4>
           <div style={{ fontSize: '0.88rem', color: '#9CA3AF', lineHeight: 2, gap: '10px' }}>
-            <p style={{ display: 'flex', gap: '3px', alignItems: 'center'}}> <img src="/map.png" alt="" style={{ width: '32px', height: '24px', alignItems: 'center'}} />Manyavangyag-6, Okhaldhunga, Nepal</p>
+            <p style={{ display: 'flex', gap: '3px', alignItems: 'center'}}> <img src="/map.png" alt="" style={{ width: '32px', height: '24px', alignItems: 'center'}} />Manyavangyag-6, Jakma, Okhaldhunga, Nepal</p>
             <p style={{ display: 'flex', gap: '3px', alignItems: 'center'}}> <img src="/phone.png" alt="" style={{ width: '32px', height: '24px', alignItems: 'center'}} /> + 977 9709192259 , +97709861949067 </p>
             <p style={{ display: 'flex', gap: '3px', alignItems: 'center'}}> <img src="/mail.png" alt="" style={{ width: '32px', height: '24px', alignItems: 'center'}} /><a href="https://mail.google.com/mail/?view=cm&fs=1&to=fulbariyubaclub@gmail.com">fulbariyubaclub@gmail.com</a></p>
           </div>
