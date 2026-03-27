@@ -5,7 +5,7 @@ import API from '../utils/api.js';
 
 const PANELS = [
   { key: 'dashboard',  icon: '📊', label: 'Dashboard'      },
-  { key: 'admins',     icon: '🔐', label: 'Manage Admins'  },
+  //{ key: 'admins',     icon: '🔐', label: 'Manage Admins'  },
   { key: 'messages',   icon: '💬', label: 'Messages'        },
 ];
 

@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, NavLink } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+
+const handleNavClick = () => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    setMobileOpen(false);
+    setUserMenuOpen(false);
+  };
 
 const LoginPage = () => {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -143,7 +149,7 @@ const LoginPage = () => {
           </form>
 
           <div style={{ textAlign: 'center', marginTop: '1rem', fontSize: '0.82rem', color: 'var(--gray-400)' }}>
-            <Link to="/" style={{ color: 'var(--primary)', fontWeight: 600 }}>← Back to website</Link>
+            <NavLink to="/" onClick={handleNavClick} style={{ color: 'var(--primary)', fontWeight: 600 }}>← Back to website</NavLink>
           </div>
 
         </div>
