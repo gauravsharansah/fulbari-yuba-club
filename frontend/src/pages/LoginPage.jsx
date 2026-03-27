@@ -4,8 +4,8 @@ import { useAuth } from '../context/AuthContext';
 
 const handleNavClick = () => {
     window.scrollTo({ top: 0, behavior: 'instant' });
-    setMobileOpen(false);
-    setUserMenuOpen(false);
+    //setMobileOpen(false);
+    //setUserMenuOpen(false);
   };
 
 const LoginPage = () => {
