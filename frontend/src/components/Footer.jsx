@@ -3,8 +3,8 @@ import { Link, NavLink } from 'react-router-dom';
 
 const handleNavClick = () => {
     window.scrollTo({ top: 0, behavior: 'instant' });
-    setMobileOpen(false);
-    setUserMenuOpen(false);
+    //setMobileOpen(false);
+    //setUserMenuOpen(false);
   };
 
 const Footer = () => (
