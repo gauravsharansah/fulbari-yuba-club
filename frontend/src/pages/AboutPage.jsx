@@ -79,7 +79,7 @@ const AboutPage = () => (
               A Club Built on Passion &amp; Community
             </h2>
             <p style={{ color: 'var(--gray-600)', lineHeight: 1.8, marginBottom: '1rem' }}>
-              Fulbari Yuba Club Jakma (F.Y.C) is a dynamic youth football club established in <strong>2057 BS</strong> in the beautiful locality of Jakma, Manyavangyag Gaun Palika-6, Okhaldhunga, Nepal.
+              Fulbari Yuba Club Jakma (F.Y.C) is a dynamic youth football club established in <strong>2057 BS</strong> in the beautiful locality of Manyavangyag Gaun Palika-6, Jakma, Okhaldhunga, Nepal.
             </p>
             <p style={{ color: 'var(--gray-600)', lineHeight: 1.8, marginBottom: '1rem' }}>
               Founded with the vision of nurturing local football talent and fostering community development, FYC has grown into one of the most respected youth organizations in Okhaldhunga district. We believe in the power of sports to unite people, build character, and create opportunities for the youth of our region.

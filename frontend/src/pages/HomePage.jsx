@@ -95,7 +95,7 @@ const HomePage = () => {
               }}>
                 <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#86EFAC', display: 'inline-block' }}></span>
                 <span style={{ color: 'white', fontSize: '0.78rem', fontWeight: 600, letterSpacing: '1px' }}>
-                  Jakma, Manyavangyag-6, Okhaldhunga
+                  Manyavangyag-6, Jakma, Okhaldhunga
                 </span>
               </div>
 
