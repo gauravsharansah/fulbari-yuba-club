@@ -159,21 +159,27 @@ const AdminPage = () => {
     setTimeout(() => setToast(null), 3500);
   };
 
+  // Replace the loadData function
   const loadData = async () => {
-    try {
-      const [p, c, msg, n, g] = await Promise.all([
-        API.get('/programs?limit=100'),
-        API.get('/certificates'),
-        API.get('/contact'),
-        API.get('/notices'),
-        API.get('/gallery'),
-      ]);
-      setPrograms(p.data.data   || []);
-      setCerts(c.data.data      || []);
-      setMessages(msg.data.data || []);
-      setNotices(n.data.data    || []);
-      setGallery(g.data.data    || []);
-    } catch {}
+    const safe = async (promise, fallback = []) => {
+      try { return await promise; }
+      catch (e) { console.warn('loadData error:', e.response?.data?.message || e.message); return { data: { data: fallback } }; }
+    };
+
+    const [p, c, msg, n, g] = await Promise.all([
+      safe(API.get('/programs?limit=100')),
+      safe(API.get('/certificates')),
+      safe(API.get('/contact')),
+      safe(API.get('/notices')),
+      safe(API.get('/gallery')),
+    ]);
+
+    setPrograms(p.data.data   || []);
+    setCerts(c.data.data      || []);
+    setMessages(msg.data.data || []);
+    setNotices(n.data.data    || []);
+    setGallery(g.data.data    || []);
+
     try {
       const a = await API.get('/auth/users');
       setAdmins((a.data.data || []).filter(u => u.role === 'admin'));
