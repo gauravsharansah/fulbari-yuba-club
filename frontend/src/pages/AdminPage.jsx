@@ -124,7 +124,7 @@ const AdminPage = () => {
   const [notices,  setNotices]  = useState([]);
   const [certs,    setCerts]    = useState([]);
   const [gallery,  setGallery]  = useState([]);
-  const [admins,   setAdmins]   = useState([]);
+  //const [admins,   setAdmins]   = useState([]);
   const [messages, setMessages] = useState([]);
   const [toast,      setToast]      = useState(null);
   const [submitting, setSubmitting] = useState(false);
@@ -338,18 +338,18 @@ const AdminPage = () => {
     setSubmitting(false);
   };
 
-  const submitAdmin = async () => {
-    if (!adminForm.name || !adminForm.email || !adminForm.password)
-      return showToast('Name, email and password are required!', 'error');
-    setSubmitting(true);
-    try {
-      const { data } = await API.post('/auth/users', { ...adminForm, role: 'admin' });
-      setAdmins(prev => [...prev, data.data]);
-      showToast('New admin added! 🔐');
-      setAdminForm({ name: '', email: '', password: '' });
-    } catch (e) { showToast(e.response?.data?.message || 'Error!', 'error'); }
-    setSubmitting(false);
-  };
+  // const submitAdmin = async () => {
+  //   if (!adminForm.name || !adminForm.email || !adminForm.password)
+  //     return showToast('Name, email and password are required!', 'error');
+  //   setSubmitting(true);
+  //   try {
+  //     const { data } = await API.post('/auth/users', { ...adminForm, role: 'admin' });
+  //     setAdmins(prev => [...prev, data.data]);
+  //     showToast('New admin added! 🔐');
+  //     setAdminForm({ name: '', email: '', password: '' });
+  //   } catch (e) { showToast(e.response?.data?.message || 'Error!', 'error'); }
+  //   setSubmitting(false);
+  // };
 
   // ── Dashboard management section toggle ──────────────────────────────────────
   const toggleSection = (key) => setExpandedSection(prev => prev === key ? null : key);
