@@ -5,8 +5,8 @@ import API from '../utils/api';
 
 const handleNavClick = () => {
     window.scrollTo({ top: 0, behavior: 'instant' });
-    setMobileOpen(false);
-    setUserMenuOpen(false);
+    //setMobileOpen(false);
+    //setUserMenuOpen(false);
   };
 
 const CATEGORY_COLOR = {
