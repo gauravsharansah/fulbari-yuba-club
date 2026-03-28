@@ -56,17 +56,98 @@ const SectionHeader = ({ title }) => (
 const AboutPage = () => (
   <div style={{ paddingTop: 'var(--navbar-h)' }}>
 
-    {/* Hero */}
-    <section style={{ background: 'linear-gradient(135deg,#7B0A1A,#C8102E)', padding: '64px 0' }}>
-      <div className="container" style={{ textAlign: 'center' }}>
-        <span className="section-tag" style={{ background: 'rgba(255,255,255,0.15)', color: 'white' }}>Our Story</span>
-        <h1 style={{ fontSize: 'clamp(1.8rem,4vw,2.8rem)', fontWeight: 800, color: 'white', margin: '0.75rem 0 1rem' }}>
-          About Fulbari Yuba Club Jakma
-        </h1>
-        <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '1rem', maxWidth: '560px', margin: '0 auto' }}>
-          फुलबारी युवा क्लव जाक्मा — Est. 2057 BS
-        </p>
+    {/* ---- HERO ---- */}
+    <section style={{
+      background: 'linear-gradient(135deg, #7B0A1A 0%, #C8102E 45%, #E8304A 100%)',
+      minHeight: '88vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden'
+    }}>
+      {/* Pattern overlay */}
+      <div style={{
+        position: 'absolute', inset: 0, opacity: 0.06,
+        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+      }} />
+      {/* Right decorative */}
+      <div style={{
+        position: 'absolute', right: '-100px', top: '50%', transform: 'translateY(-50%)',
+        width: '500px', height: '500px', borderRadius: '50%',
+        background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)'
+      }} />
+      <div style={{
+        position: 'absolute', right: '80px', top: '50%', transform: 'translateY(-50%)',
+        width: '300px', height: '300px', borderRadius: '50%',
+        background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)'
+      }} />
+
+      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '3rem', alignItems: 'center' }}>
+          <div>
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: '8px',
+              background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)',
+              border: '1px solid rgba(255,255,255,0.25)',
+              borderRadius: '30px', padding: '6px 16px', marginBottom: '1.5rem'
+            }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#86EFAC', display: 'inline-block' }}></span>
+              <span style={{ color: 'white', fontSize: '0.78rem', fontWeight: 600, letterSpacing: '1px' }}>
+                Manyavangyag-6, Jakma, Okhaldhunga
+              </span>
+            </div>
+
+            <h1 style={{
+              fontSize: 'clamp(2.2rem, 5vw, 3.8rem)', fontWeight: 800,
+              color: 'white', lineHeight: 1.1, marginBottom: '0.5rem'
+            }}>
+              Fulbari Yuba Club
+            </h1>
+            <h2 style={{
+              fontSize: 'clamp(1.4rem, 3vw, 2rem)', fontWeight: 700,
+              color: 'rgba(255,255,255,0.85)', marginBottom: '1rem', letterSpacing: '2px'
+            }}>
+              JAKMA — F.Y.C
+            </h2>
+            <p style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.75)', marginBottom: '0.5rem', fontWeight: 500 }}>
+              फुलबारी युवा क्लव जाक्मा
+            </p>
+            <p style={{ fontSize: '0.95rem', color: 'rgba(255,255,255,0.65)', marginBottom: '2rem', maxWidth: '520px', lineHeight: 1.7 }}>
+              A hub for youth, sports, culture &amp; community growth. Nurturing talent and fostering community development since 2057 BS.
+            </p>
+
+            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+              <Link to="/programs" className="btn btn-lg" style={{
+                background: 'white', color: '#C8102E', border: '2px solid white', fontWeight: 700
+              }}>View Programs</Link>
+              <Link to="/awards" className="btn btn-lg" style={{
+                background: 'transparent', color: 'white', border: '2px solid rgba(255,255,255,0.5)'
+              }}>Achievements</Link>
+            </div>
+          </div>
+
+          {/* Logo */}
+          <div style={{ textAlign: 'center' }} className="hero-logo-wrap">
+            <div style={{
+              width: '220px', height: '220px', borderRadius: '50%',
+              background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(8px)',
+              border: '4px solid rgba(255,255,255,0.3)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+              animation: 'floatLogo 4s ease-in-out infinite'
+            }}>
+              <img src="/logo.png" alt="FYC Jakma" style={{ width: '180px', height: '180px', borderRadius: '50%', objectFit: 'cover' }}
+                onError={e => {
+                  e.target.parentElement.innerHTML = `<span style="font-size:5rem">⚽</span>`;
+                }} />
+            </div>
+            <div style={{ marginTop: '1rem', background: 'rgba(255,255,255,0.15)', borderRadius: '30px', padding: '6px 20px', display: 'inline-block' }}>
+              <span style={{ color: 'rgba(255,255,255,0.9)', fontSize: '0.8rem', fontWeight: 600 }}>Est. 2057 BS · स्था: २०५७</span>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <style>{`
+        @keyframes floatLogo { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+        @media(max-width:768px) { .hero-logo-wrap { display:none; } }
+      `}</style>
     </section>
 
     {/* Main About */}
