@@ -114,18 +114,22 @@ const SectionDivider = ({ label }) => (
   </div>
 );
 
+// ── FormData config: removes default Content-Type so browser sets multipart boundary correctly ──
+const FD_CONFIG = { headers: { 'Content-Type': undefined } };
+
 // ── Main Component ────────────────────────────────────────────────────────────
 const AdminPage = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [panel, setPanel] = useState('dashboard');
 
-  const [programs, setPrograms] = useState([]);
-  const [notices,  setNotices]  = useState([]);
-  const [certs,    setCerts]    = useState([]);
-  const [gallery,  setGallery]  = useState([]);
+  const [programs,   setPrograms]   = useState([]);
+  const [notices,    setNotices]    = useState([]);
+  const [certs,      setCerts]      = useState([]);
+  const [gallery,    setGallery]    = useState([]);
+  const [heroSlides, setHeroSlides] = useState([]);
   //const [admins,   setAdmins]   = useState([]);
-  const [messages, setMessages] = useState([]);
+  const [messages,   setMessages]   = useState([]);
   const [toast,      setToast]      = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -147,6 +151,12 @@ const AdminPage = () => {
   const [galleryCaption,  setGalleryCaption]  = useState('');
   const [galleryCategory, setGalleryCategory] = useState('event');
 
+  // Hero slides form state
+  const [heroFile,     setHeroFile]     = useState(null);
+  const [heroCaption,  setHeroCaption]  = useState('');
+  const [heroTitle,    setHeroTitle]    = useState('');
+  const [heroInterval, setHeroInterval] = useState(5); // seconds
+
   // Expand/collapse state for dashboard sections
   const [expandedSection, setExpandedSection] = useState(null);
 
@@ -159,19 +169,20 @@ const AdminPage = () => {
     setTimeout(() => setToast(null), 3500);
   };
 
-  // Replace the loadData function
   const loadData = async () => {
     const safe = async (promise, fallback = []) => {
       try { return await promise; }
       catch (e) { console.warn('loadData error:', e.response?.data?.message || e.message); return { data: { data: fallback } }; }
     };
 
-    const [p, c, msg, n, g] = await Promise.all([
+    const [p, c, msg, n, g, hs, hset] = await Promise.all([
       safe(API.get('/programs?limit=100')),
       safe(API.get('/certificates')),
       safe(API.get('/contact')),
       safe(API.get('/notices')),
       safe(API.get('/gallery')),
+      safe(API.get('/hero-slides')),
+      safe(API.get('/hero-slides/settings')),
     ]);
 
     setPrograms(p.data.data   || []);
@@ -179,10 +190,14 @@ const AdminPage = () => {
     setMessages(msg.data.data || []);
     setNotices(n.data.data    || []);
     setGallery(g.data.data    || []);
+    setHeroSlides(hs.data.data || []);
+
+    const ivl = hset?.data?.data?.interval;
+    if (ivl && typeof ivl === 'number') setHeroInterval(Math.round(ivl / 1000));
 
     try {
       const a = await API.get('/auth/users');
-      setAdmins((a.data.data || []).filter(u => u.role === 'admin'));
+      // setAdmins((a.data.data || []).filter(u => u.role === 'admin'));
     } catch {}
   };
 
@@ -195,20 +210,22 @@ const AdminPage = () => {
     if (!window.confirm('Are you sure you want to delete this?')) return;
     try {
       const urls = {
-        program: `/programs/${id}`,
-        notice:  `/notices/${id}`,
-        cert:    `/certificates/${id}`,
-        gallery: `/gallery/${id}`,
-        contact: `/contact/${id}`,
-        user:    `/auth/users/${id}`,
+        program:   `/programs/${id}`,
+        notice:    `/notices/${id}`,
+        cert:      `/certificates/${id}`,
+        gallery:   `/gallery/${id}`,
+        contact:   `/contact/${id}`,
+        user:      `/auth/users/${id}`,
+        heroSlide: `/hero-slides/${id}`,
       };
       await API.delete(urls[type]);
-      if (type === 'program') setPrograms(prev => prev.filter(p => p._id !== id));
-      if (type === 'notice')  setNotices(prev  => prev.filter(n => n._id !== id));
-      if (type === 'cert')    setCerts(prev    => prev.filter(c => c._id !== id));
-      if (type === 'gallery') setGallery(prev  => prev.filter(g => g._id !== id));
-      if (type === 'contact') setMessages(prev => prev.filter(m => m._id !== id));
-      if (type === 'user')    setAdmins(prev   => prev.filter(a => a._id !== id));
+      if (type === 'program')   setPrograms(prev  => prev.filter(p => p._id !== id));
+      if (type === 'notice')    setNotices(prev   => prev.filter(n => n._id !== id));
+      if (type === 'cert')      setCerts(prev     => prev.filter(c => c._id !== id));
+      if (type === 'gallery')   setGallery(prev   => prev.filter(g => g._id !== id));
+      if (type === 'contact')   setMessages(prev  => prev.filter(m => m._id !== id));
+      // if (type === 'user')   setAdmins(prev    => prev.filter(a => a._id !== id));
+      if (type === 'heroSlide') setHeroSlides(prev => prev.filter(h => h._id !== id));
       showToast('Deleted.', 'error');
     } catch (e) { showToast(e.response?.data?.message || 'Delete failed!', 'error'); }
   };
@@ -230,11 +247,11 @@ const AdminPage = () => {
       Object.entries(progForm).forEach(([k, v]) => { if (v) fd.append(k, v); });
       if (progCover) fd.append('coverImage', progCover);
       if (editingProgram) {
-        const { data } = await API.put(`/programs/${editingProgram._id}`, fd);
+        const { data } = await API.put(`/programs/${editingProgram._id}`, fd, FD_CONFIG);
         setPrograms(prev => prev.map(p => p._id === editingProgram._id ? data.data : p));
         showToast('Program updated! ✅');
       } else {
-        const { data } = await API.post('/programs', fd);
+        const { data } = await API.post('/programs', fd, FD_CONFIG);
         setPrograms(prev => [data.data, ...prev]);
         showToast('Program published! 🎉');
       }
@@ -304,11 +321,11 @@ const AdminPage = () => {
       Object.entries(certForm).forEach(([k, v]) => { if (v) fd.append(k, v); });
       if (certImage) fd.append('image', certImage);
       if (editingCert) {
-        const { data } = await API.put(`/certificates/${editingCert._id}`, fd);
+        const { data } = await API.put(`/certificates/${editingCert._id}`, fd, FD_CONFIG);
         setCerts(prev => prev.map(c => c._id === editingCert._id ? data.data : c));
         showToast('Award updated! ✅');
       } else {
-        const { data } = await API.post('/certificates', fd);
+        const { data } = await API.post('/certificates', fd, FD_CONFIG);
         setCerts(prev => [data.data, ...prev]);
         showToast('Award added! 🏆');
       }
@@ -335,27 +352,41 @@ const AdminPage = () => {
       galleryFiles.forEach(f => fd.append('photos', f));
       fd.append('caption', galleryCaption);
       fd.append('category', galleryCategory);
-      const { data } = await API.post('/gallery', fd);
+      const { data } = await API.post('/gallery', fd, FD_CONFIG);
       const uploaded = data.data;
       setGallery(prev => [...(Array.isArray(uploaded) ? uploaded : [uploaded]), ...prev]);
       showToast(`${galleryFiles.length} photo(s) uploaded! 📸`);
       setGalleryFiles([]); setGalleryCaption('');
-    } catch { showToast('Upload failed!', 'error'); }
+    } catch (e) { showToast(e.response?.data?.message || 'Upload failed!', 'error'); }
     setSubmitting(false);
   };
 
-  // const submitAdmin = async () => {
-  //   if (!adminForm.name || !adminForm.email || !adminForm.password)
-  //     return showToast('Name, email and password are required!', 'error');
-  //   setSubmitting(true);
-  //   try {
-  //     const { data } = await API.post('/auth/users', { ...adminForm, role: 'admin' });
-  //     setAdmins(prev => [...prev, data.data]);
-  //     showToast('New admin added! 🔐');
-  //     setAdminForm({ name: '', email: '', password: '' });
-  //   } catch (e) { showToast(e.response?.data?.message || 'Error!', 'error'); }
-  //   setSubmitting(false);
-  // };
+  // ── Hero Slides handlers ─────────────────────────────────────────────────────
+  const uploadHeroSlide = async () => {
+    if (!heroFile) return showToast('Select an image first!', 'error');
+    setSubmitting(true);
+    try {
+      const fd = new FormData();
+      fd.append('image', heroFile);
+      if (heroTitle)   fd.append('title',   heroTitle);
+      if (heroCaption) fd.append('caption', heroCaption);
+      const { data } = await API.post('/hero-slides', fd, FD_CONFIG);
+      setHeroSlides(prev => [data.data, ...prev]);
+      showToast('Hero slide added! 🏠');
+      setHeroFile(null); setHeroCaption(''); setHeroTitle('');
+      // Reset the file input
+      const fi = document.getElementById('adm-hero-img');
+      if (fi) fi.value = '';
+    } catch (e) { showToast(e.response?.data?.message || 'Upload failed!', 'error'); }
+    setSubmitting(false);
+  };
+
+  const saveHeroSettings = async () => {
+    try {
+      await API.put('/hero-slides/settings', { interval: heroInterval * 1000 });
+      showToast('Slideshow settings saved! ✅');
+    } catch { showToast('Failed to save settings.', 'error'); }
+  };
 
   // ── Dashboard management section toggle ──────────────────────────────────────
   const toggleSection = (key) => setExpandedSection(prev => prev === key ? null : key);
@@ -368,12 +399,13 @@ const AdminPage = () => {
         return (
           <>
             {/* Stats */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '1.2rem', marginBottom: '2rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: '1.2rem', marginBottom: '2rem' }}>
               {[
-                { icon: '📋', label: 'Programs', val: programs.length, color: '#C8102E', bg: '#FEF2F2' },
-                { icon: '📢', label: 'Notices',  val: notices.length,  color: '#6D28D9', bg: '#F5F3FF' },
-                { icon: '🖼️', label: 'Gallery',  val: gallery.length,  color: '#0369A1', bg: '#F0F9FF' },
-                { icon: '🏆', label: 'Awards',   val: certs.length,    color: '#B8941F', bg: '#FEF3C7' },
+                { icon: '📋', label: 'Programs',    val: programs.length,   color: '#C8102E', bg: '#FEF2F2' },
+                { icon: '📢', label: 'Notices',     val: notices.length,    color: '#6D28D9', bg: '#F5F3FF' },
+                { icon: '🖼️', label: 'Gallery',     val: gallery.length,    color: '#0369A1', bg: '#F0F9FF' },
+                { icon: '🏆', label: 'Awards',      val: certs.length,      color: '#B8941F', bg: '#FEF3C7' },
+                { icon: '🏠', label: 'Hero Slides', val: heroSlides.length, color: '#047857', bg: '#ECFDF5' },
               ].map((s, i) => (
                 <div key={i} style={{ background: 'white', border: '1px solid var(--gray-200)', borderRadius: '12px', padding: '1.5rem' }}>
                   <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: s.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.3rem', marginBottom: '1rem' }}>{s.icon}</div>
@@ -381,7 +413,6 @@ const AdminPage = () => {
                   <div style={{ fontSize: '0.78rem', color: 'var(--gray-500)', marginTop: '4px', fontWeight: 500 }}>{s.label}</div>
                 </div>
               ))}
-              <style>{`@media(max-width:900px){div[style*="repeat(4"]{grid-template-columns:repeat(2,1fr)!important}}`}</style>
             </div>
 
             {/* ── Manage Programs ── */}
@@ -395,7 +426,6 @@ const AdminPage = () => {
               </div>
               {expandedSection === 'programs' && (
                 <div style={{ padding: '1.5rem' }}>
-                  {/* Add / Edit Form */}
                   <p style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--gray-700)', marginBottom: '1rem' }}>
                     {editingProgram ? '✏️ Edit Program' : '➕ Add New Program'}
                   </p>
@@ -693,51 +723,121 @@ const AdminPage = () => {
                 </div>
               )}
             </div>
+
+            {/* ── Manage Hero Slides ── */}
+            <div style={{ background: 'white', border: '1px solid var(--gray-200)', borderRadius: '12px', marginBottom: '1.5rem', overflow: 'hidden' }}>
+              <div
+                onClick={() => toggleSection('heroSlides')}
+                style={{ padding: '1rem 1.5rem', borderBottom: expandedSection === 'heroSlides' ? '1px solid var(--gray-100)' : 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', userSelect: 'none' }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <h3 style={{ fontWeight: 700, color: 'var(--gray-900)', fontSize: '1rem', margin: 0 }}>🏠 Manage Hero Slides</h3>
+                  <span style={{ background: '#ECFDF5', color: '#047857', fontSize: '0.7rem', fontWeight: 700, padding: '2px 8px', borderRadius: '20px' }}>Homepage Slideshow</span>
+                </div>
+                <span style={{ color: 'var(--gray-400)', fontSize: '0.85rem' }}>{expandedSection === 'heroSlides' ? '▲ Collapse' : '▼ Expand'}</span>
+              </div>
+              {expandedSection === 'heroSlides' && (
+                <div style={{ padding: '1.5rem' }}>
+
+                  {/* Info banner */}
+                  <div style={{ background: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '10px', padding: '0.75rem 1rem', marginBottom: '1.5rem', fontSize: '0.83rem', color: '#1E40AF' }}>
+                    <strong>ℹ️ Hero Slideshow:</strong> These images replace the homepage hero section. If no slides are uploaded, the default red gradient hero is shown. Images are displayed one at a time and scroll automatically.
+                  </div>
+
+                  {/* Upload form */}
+                  <p style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--gray-700)', marginBottom: '1rem' }}>🖼️ Add New Slide</p>
+                  <div
+                    style={{ border: '2px dashed var(--gray-300)', borderRadius: '12px', padding: '2rem', textAlign: 'center', cursor: 'pointer', background: 'var(--gray-50)', marginBottom: '1rem' }}
+                    onClick={() => document.getElementById('adm-hero-img').click()}
+                  >
+                    <div style={{ fontSize: '2.5rem', marginBottom: '0.5rem' }}>🏠</div>
+                    <p style={{ fontWeight: 600, color: 'var(--gray-700)' }}>Click to select image</p>
+                    <p style={{ fontSize: '0.8rem', color: 'var(--gray-400)', marginTop: '4px' }}>JPG, PNG, WebP · Landscape recommended (16:9)</p>
+                    {heroFile && <p style={{ color: '#166534', marginTop: '0.5rem', fontWeight: 600 }}>✓ {heroFile.name}</p>}
+                  </div>
+                  <input
+                    id="adm-hero-img"
+                    type="file"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={e => setHeroFile(e.target.files[0] || null)}
+                  />
+                  <Grid2>
+                    <Field label="Slide Title (optional)" hint="Shown as a heading overlay on the slide.">
+                      <input className="form-input" value={heroTitle} onChange={e => setHeroTitle(e.target.value)} placeholder="e.g. Annual Tournament 2082" />
+                    </Field>
+                    <Field label="Caption (optional)" hint="Short label shown at the bottom of the slide.">
+                      <input className="form-input" value={heroCaption} onChange={e => setHeroCaption(e.target.value)} placeholder="e.g. Jakma Ground, 2082" />
+                    </Field>
+                  </Grid2>
+                  <div style={{ textAlign: 'right', marginBottom: '1.5rem' }}>
+                    <button className="btn btn-primary" onClick={uploadHeroSlide} disabled={submitting}>
+                      {submitting ? 'Uploading...' : '⬆️ Add Slide'}
+                    </button>
+                  </div>
+
+                  {/* Interval setting */}
+                  <div style={{ background: 'var(--gray-50)', border: '1px solid var(--gray-200)', borderRadius: '10px', padding: '1rem 1.25rem', marginBottom: '1.5rem' }}>
+                    <p style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--gray-700)', marginBottom: '0.75rem' }}>⏱ Slideshow Interval</p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <input
+                          type="range"
+                          min="2" max="30" step="1"
+                          value={heroInterval}
+                          onChange={e => setHeroInterval(Number(e.target.value))}
+                          style={{ width: '160px', accentColor: '#C8102E', cursor: 'pointer' }}
+                        />
+                        <span style={{ fontWeight: 700, fontSize: '1.1rem', color: '#C8102E', minWidth: '50px' }}>{heroInterval}s</span>
+                      </div>
+                      <p style={{ fontSize: '0.78rem', color: 'var(--gray-400)', margin: 0, flex: 1 }}>Each slide will be shown for {heroInterval} second{heroInterval !== 1 ? 's' : ''} before advancing.</p>
+                      <button className="btn btn-primary" onClick={saveHeroSettings} style={{ fontSize: '0.82rem', padding: '7px 16px' }}>
+                        💾 Save Interval
+                      </button>
+                    </div>
+                  </div>
+
+                  <SectionDivider label={`Current Slides (${heroSlides.length})`} />
+                  {heroSlides.length === 0 ? (
+                    <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--gray-400)' }}>
+                      <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🏠</div>
+                      <p style={{ fontSize: '0.88rem' }}>No hero slides yet. The default gradient hero will be shown on the homepage.</p>
+                    </div>
+                  ) : (
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: '12px' }}>
+                      {heroSlides.map((slide, idx) => (
+                        <div key={slide._id} style={{ position: 'relative', borderRadius: '10px', overflow: 'hidden', border: '1px solid var(--gray-200)', background: '#111' }}>
+                          {/* Slide number badge */}
+                          <div style={{ position: 'absolute', top: '6px', left: '6px', background: 'rgba(0,0,0,0.7)', color: 'white', borderRadius: '6px', padding: '2px 7px', fontSize: '0.68rem', fontWeight: 700, zIndex: 1 }}>
+                            #{idx + 1}
+                          </div>
+                          <img
+                            src={slide.url}
+                            alt={slide.caption || ''}
+                            style={{ width: '100%', aspectRatio: '16/9', objectFit: 'cover', display: 'block' }}
+                          />
+                          <button
+                            onClick={() => del('heroSlide', slide._id)}
+                            style={{ position: 'absolute', top: '6px', right: '6px', background: 'rgba(200,16,46,0.9)', color: 'white', border: 'none', borderRadius: '4px', padding: '2px 7px', fontSize: '0.7rem', cursor: 'pointer', fontFamily: 'var(--font)', zIndex: 1 }}
+                          >🗑</button>
+                          {(slide.title || slide.caption) && (
+                            <div style={{ padding: '6px 8px', background: 'white', borderTop: '1px solid var(--gray-100)' }}>
+                              {slide.title && <p style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--gray-800)', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{slide.title}</p>}
+                              {slide.caption && <p style={{ fontSize: '0.68rem', color: 'var(--gray-400)', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{slide.caption}</p>}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
           </>
         );
 
-      // // ── Manage Admins (untouched) ────────────────────────────────────────────
-      // case 'admins':
-      //   return (
-      //     <>
-      //       <div style={{ background: '#FEF3C7', border: '1px solid #FDE68A', borderRadius: '10px', padding: '1rem 1.5rem', marginBottom: '1.5rem', fontSize: '0.88rem', color: '#92400E' }}>
-      //         <strong>ℹ️ Multiple Admins:</strong> Accounts added here have full dashboard access. You can also seed admin accounts via backend environment variables (ADMIN_2_EMAIL, ADMIN_2_PASSWORD, etc.).
-      //       </div>
-      //       <Card title="🔐 Add New Admin Account">
-      //         <Grid2>
-      //           <Field label="Admin Name *">
-      //             <input className="form-input" value={adminForm.name} onChange={e => setAdminForm({ ...adminForm, name: e.target.value })} placeholder="Admin's full name" />
-      //           </Field>
-      //           <Field label="Admin Email *">
-      //             <input className="form-input" type="email" value={adminForm.email} onChange={e => setAdminForm({ ...adminForm, email: e.target.value })} placeholder="admin2@fycjakma.com" />
-      //           </Field>
-      //         </Grid2>
-      //         <Field label="Password *">
-      //           <input className="form-input" type="password" value={adminForm.password} onChange={e => setAdminForm({ ...adminForm, password: e.target.value })} placeholder="Minimum 8 characters" />
-      //         </Field>
-      //         <div style={{ textAlign: 'right', marginTop: '1rem' }}>
-      //           <button className="btn btn-primary" onClick={submitAdmin} disabled={submitting}>
-      //             {submitting ? 'Adding...' : '🔐 Add Admin'}
-      //           </button>
-      //         </div>
-      //       </Card>
-      //       <Card title={`Current Admins (${admins.length})`}>
-      //         <Table
-      //           cols={['Name', 'Email', 'Created', 'Actions']}
-      //           rows={admins.map(a => [
-      //             <span style={{ fontWeight: 600 }}>{a.name}</span>,
-      //             a.email,
-      //             new Date(a.createdAt).toLocaleDateString('en-GB'),
-      //             a._id === user.id
-      //               ? <span style={{ fontSize: '0.78rem', color: 'var(--gray-400)' }}>You</span>
-      //               : <DelBtn onClick={() => del('user', a._id)} />,
-      //           ])}
-      //         />
-      //       </Card>
-      //     </>
-      //   );
-
-      // ── Messages (untouched) ─────────────────────────────────────────────────
+      // ── Messages ─────────────────────────────────────────────────────────────
       case 'messages':
         return (
           <Card title={`💬 Contact Messages (${messages.filter(m => !m.read).length} unread)`}>
