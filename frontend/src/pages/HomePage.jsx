@@ -350,22 +350,6 @@ const HomePage = () => {
         <style>{`@media(max-width:768px){section div[style*="auto 1fr"]{grid-template-columns:1fr!important;text-align:center;}}`}</style>
       </section>
 
-      {/* ---- CTA ---- */}
-      <section className="section-sm" style={{ background: 'var(--gray-50)' }}>
-        <div className="container" style={{ textAlign: 'center' }}>
-          <h2 style={{ fontWeight: 800, fontSize: '1.8rem', color: 'var(--gray-900)', marginBottom: '0.75rem' }}>
-            Be Part of Our Journey
-          </h2>
-          <p style={{ color: 'var(--gray-500)', marginBottom: '2rem', maxWidth: '480px', margin: '0 auto 2rem' }}>
-            Join Fulbari Yuba Club Jakma and become part of a growing community of young sportspersons.
-          </p>
-          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <NavLink to="/contact" onClick={handleNavClick} className="btn btn-primary btn-lg">Contact Us</NavLink>
-            <a href="https://www.facebook.com/profile.php?id=100084950064757" target="_blank" rel="noreferrer" className="btn btn-ghost btn-lg">Follow on Facebook</a>
-          </div>
-        </div>
-      </section>
-
       {/* ---- SPONSORS ---- */}
       {SPONSORS.length > 0 && (
         <section className="section-sm" style={{ background: 'white', borderTop: '1px solid var(--gray-100)' }}>
