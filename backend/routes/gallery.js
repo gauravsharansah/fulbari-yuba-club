@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { Gallery } = require('../models/Other');
 const { protect, adminOnly } = require('../middleware/auth');
-const { upload } = require('../config/cloudinary');
+const { upload, uploadToCloudinary } = require('../config/cloudinary');
 
 router.get('/', async (req, res) => {
   try {
@@ -15,12 +15,22 @@ router.get('/', async (req, res) => {
 
 router.post('/', protect, adminOnly, upload.array('photos', 20), async (req, res) => {
   try {
-    const docs = (req.files || []).map(f => ({
-      url: f.path, publicId: f.filename,
-      caption: req.body.caption, category: req.body.category || 'other',
-      uploadedBy: req.user._id
-    }));
-    const photos = await Gallery.insertMany(docs);
+    if (!req.files || req.files.length === 0)
+      return res.status(400).json({ success: false, message: 'No images uploaded' });
+
+    const uploaded = [];
+    for (const file of req.files) {
+      const result = await uploadToCloudinary(file.buffer);
+      uploaded.push({
+        url: result.secure_url,
+        publicId: result.public_id,
+        caption: req.body.caption || '',
+        category: req.body.category || 'other',
+        uploadedBy: req.user._id,
+      });
+    }
+
+    const photos = await Gallery.insertMany(uploaded);
     res.status(201).json({ success: true, data: photos });
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
 });

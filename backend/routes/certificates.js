@@ -25,9 +25,16 @@ router.post('/', protect, adminOnly, upload.single('image'), async (req, res) =>
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
 });
 
-router.put('/:id', protect, adminOnly, async (req, res) => {
+// PUT now also handles image replacement
+router.put('/:id', protect, adminOnly, upload.single('image'), async (req, res) => {
   try {
-    const cert = await Certificate.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const update = { ...req.body };
+    if (req.file) {
+      const result = await uploadToCloudinary(req.file.buffer);
+      update.image = { url: result.secure_url, publicId: result.public_id };
+    }
+    const cert = await Certificate.findByIdAndUpdate(req.params.id, update, { new: true });
+    if (!cert) return res.status(404).json({ success: false, message: 'Not found' });
     await syncCertificates(Certificate);
     res.json({ success: true, data: cert });
   } catch (err) { res.status(500).json({ success: false, message: err.message }); }
